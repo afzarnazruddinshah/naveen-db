@@ -1,0 +1,11 @@
+#records-table, tr, td
+{
+ border: 1px solid blue;
+ padding: 5px;
+}
+
+#records-table
+{
+    border: 2px solid green;
+    border-radius: 5px;
+}
