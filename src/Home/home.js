@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import * as firebase from 'firebase';
 import { getToday } from '../Utils/utilityFunctions';
-
+import './home.css';
 class Home extends Component {
     state = { 
         count: 0
@@ -43,16 +43,14 @@ class Home extends Component {
     }
     render() {
         return (
-            <Fragment>
-                Welcome to Naveen's DB
-                <p>
-                    <Link to="/addrecords">Add Records</Link> &nbsp;
-                    <Link to="/viewrecords">View Records</Link> &nbsp;
-                    <Link to="/notifications">Notifications ({this.state.count})</Link>  &nbsp;
-                    <a href="##" onClick={this.getNotificationCount}>Refresh</a>
-                </p>
+            <div className="dashboardform">
+                <h2>Welcome to Naveen's DB</h2>
+                    <p><Link  to="/addrecords"><button className="link">Add Records</button></Link> </p>
+                    <p><Link  to="/viewrecords"><button className="link">View Records</button></Link></p> 
+                    <p><Link  to="/notifications"><button className="link">Notifications ({this.state.count})</button></Link> </p>
+                   <p> <a href="##" onClick={this.getNotificationCount}><button className="link">Refresh</button></a></p>
                 <audio  webkit-playsinline="true" playsInline={true}  ref={this.audioRef} id="notificationSound" src="https://notificationsounds.com/soundfiles/b2f627fff19fda463cb386442eac2b3d/file-sounds-1142-inflicted.mp3" />
-            </Fragment>
+            </div>
          );
     }
 }

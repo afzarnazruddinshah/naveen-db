@@ -1,0 +1,20 @@
+.form
+{
+    align-self: center;
+    text-align: center;
+}
+
+.form input, .form button
+{
+    margin: 15px;
+    padding: 8px 25px;
+}
+
+p{
+    margin-bottom: 0px;
+}
+
+#home
+{
+    color: blue;
+}

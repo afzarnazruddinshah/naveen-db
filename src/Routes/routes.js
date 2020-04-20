@@ -12,7 +12,7 @@ const Routes = () => {
     return ( 
         <BrowserRouter>
             <Switch>
-                <Route exact path="/naveen-db" render={ ()=> <Redirect to="/dashboard" />} />
+                <Route exact path="/naveen-db/" render={ ()=> <Redirect to="/dashboard" />} />
                 <Route exact path="/" render={ ()=> <Redirect to="/dashboard" />} />
                 <Route exact path="/dashboard" render={ ()=> <Home />} />
                 <Route exact path="/addrecords" render={ ()=> <AddRecord />} />

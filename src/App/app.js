@@ -7,9 +7,9 @@ class App extends Component {
 
     render() { 
         return ( 
-            <React.Fragment>
+            <div className="App">
             <Routes/>
-        </React.Fragment>
+        </div>
          );
     }
 }

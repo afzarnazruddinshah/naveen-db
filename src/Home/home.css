@@ -1,0 +1,21 @@
+.dashboardform
+{
+    align-content: center;
+    align-self: center;
+    text-align: center;
+}
+
+.dashboardform .link{
+    padding: 8px 25px;
+}
+
+#routes, .link
+{
+  color: black;
+}
+
+.link
+{
+    margin: 15px;
+    padding: 20px 30px;
+}
