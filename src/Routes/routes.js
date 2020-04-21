@@ -1,4 +1,4 @@
-import React, { Fragment, useState} from 'react';
+import React, { Fragment} from 'react';
 import {BrowserRouter, Route, Redirect,Switch } from 'react-router-dom';
 import AddRecord from '../AddRecord/addRecord';
 import ViewRecords from '../ViewRecords/viewRecords';
@@ -6,6 +6,7 @@ import Home from '../Home/home';
 import Notifications from '../Notifications/notifications';
 import ErrorBoundary from '../ErrorBoundary/errorboundary';
 import PageNotFound from '../PageNotFound/pagenotfound';
+import EditRecord from '../EditRecord/editRecord';
 
 const Routes = () => {
    
@@ -17,7 +18,8 @@ const Routes = () => {
                 <Route exact path="/dashboard" render={ ()=> <Home />} />
                 <Route exact path="/addrecords" render={ ()=> <AddRecord />} />
                 <Route exact path="/notifications" render={ ()=> <Notifications />} />
-                <Route exact path="/viewrecords" render={ ()=> <ViewRecords />} />  
+                <Route exact path="/viewrecords" render={ ()=> <ViewRecords />} /> 
+                <Route exact path="/editrecord/:id" render={ ()=> <EditRecord />}  />
                 <Route
                       render={
                         () =>

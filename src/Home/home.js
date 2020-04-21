@@ -1,6 +1,6 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import * as firebase from 'firebase';
+import  {firestore} from 'firebase';
 import { getToday } from '../Utils/utilityFunctions';
 import './home.css';
 class Home extends Component {
@@ -20,19 +20,57 @@ class Home extends Component {
 
    
     getNotificationCount = () => {
-       var today = getToday();
-        var db = firebase.firestore();
-        var recArr =[];
-        db.collection("installations").where("nextServiceDate", "==", today).get().then((querySnapshot) => {
+        var today = getToday();
+        var db = firestore();
+        var recArr = [];
+        db.collection("installations")
+          .where("nextServiceDate", "==", today)
+          .get()
+          .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
-                recArr.push(doc.data());
-                this.setState(
-                    ()=> { return {count: recArr.length}},
-                    ()=> { this.playNotificationSound(recArr.length)}
-                );
+              const idObj = { id: doc.id};
+              const obj = { ...idObj, ...doc.data()};
+              recArr.push(obj);
             });
+            this.setState(
+              () => {
+                return {
+                  records: recArr,
+                  recordsPresent: true,
+                  count: recArr.length,
+                };
+              },
+              () => { }
+            );
+          })
+          .catch( (err)=> {
+            console.log(err);
+          });
+        db.collection("installations")
+        .where("status", "==", "pending")
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            const idObj = { id: doc.id};
+            const obj = { ...idObj, ...doc.data()};
+            recArr.push(obj);
+          });
+          // var rec = recArr.concat(this.state.records);
+    
+          this.setState(
+            () => {
+              return {
+                records: recArr,
+                recordsPresent: true,
+                count: recArr.length,
+              };
+            },
+            () => { this.playNotificationSound(this.state.count);}
+          );
+        })
+        .catch( (err)=> {
+          console.log(err);
         });
-        // this.playNotificationSound();
     }
 
     playNotificationSound = (count) => {

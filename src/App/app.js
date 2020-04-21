@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import AddRecord from '../AddRecord/addRecord';
 import Routes from '../Routes/routes';
 
 class App extends Component {

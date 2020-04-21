@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 // import firebase from 'firebase/app';
-import * as firebase from 'firebase';
+// import * as firebase from 'firebase';
+import  {firestore} from 'firebase';
 import { Link , Redirect, withRouter} from 'react-router-dom';
 import './addrecords.css';
 class AddRecord extends Component {
@@ -14,10 +15,6 @@ class AddRecord extends Component {
         dateofinstallment: null,
         nextservicedate: null,
         address: null
-    }
-    constructor(props)
-    {
-        super(props);
     }
 
     handleInputChange = e => {
@@ -37,11 +34,12 @@ class AddRecord extends Component {
     }
     
     addRecord = e => {
+        e.preventDefault();
         if(this.validateInput())
         {
             if(window.confirm("Are you sure you want to add this Record?"))
         {
-            var db = firebase.firestore();
+            var db = firestore();
             db.collection("installations").add({
                 custName: this.state.name,
                 custPhone: this.state.number,
@@ -73,6 +71,9 @@ class AddRecord extends Component {
         }
         return ( 
             <div className="form">
+                <p>
+                    <Link  to="/dashboard"><button id="home">{this.state.dashboardStmt}</button></Link>
+                </p>
                 <form>
                     <h2>Add New Record</h2>
                     <p htmlFor="name">Customer Name:</p>
@@ -90,9 +91,7 @@ class AddRecord extends Component {
                     <div></div>
                     <button type="submit" onClick={this.addRecord}> Add New Record</button>
                 </form>
-                <p>
-                <Link  to="/dashboard"><button id="home">{this.state.dashboardStmt}</button></Link>
-                </p>
+                
             </div>
          );
     }
