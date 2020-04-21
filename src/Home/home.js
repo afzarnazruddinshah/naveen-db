@@ -1,26 +1,37 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Link , withRouter} from "react-router-dom";
 import { firestore } from "firebase";
 import { getToday } from "../Utils/utilityFunctions";
 import "./home.css";
+import firebase from 'firebase';
 class Home extends Component {
   state = {
     count: 0,
   };
-
   constructor(props) {
     super(props);
-    this.audioRef = React.createRef();
+    this.audioRef = React.createRef(); //For Notification Audio Tag
   }
-  // componentDidMount()
-  // {
-  //     this.getNotificationCount();
-  // }
 
+  componentDidMount()
+  {
+      this.getCurrentUser(); //To Verify Authentication
+  }
+
+  getCurrentUser = e => {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user === null || user === undefined) 
+      {
+        this.props.history.push('/login');
+      } 
+    });
+  }
+  //For Getting the notification Count on Refresh button click
   getNotificationCount = () => {
     var today = getToday();
     var db = firestore();
     var recArr = [];
+    //Getting records with today as their Next service Date
     db.collection("installations")
       .where("nextServiceDate", "==", today)
       .get()
@@ -44,6 +55,7 @@ class Home extends Component {
       .catch((err) => {
         console.log(err);
       });
+    // Getting Pending Service Records and adding them to above Array
     db.collection("installations")
       .where("status", "==", "pending")
       .get()
@@ -56,8 +68,6 @@ class Home extends Component {
             recArr.push(obj);
           }
         });
-        // var rec = recArr.concat(this.state.records);
-
         this.setState(
           () => {
             return {
@@ -76,11 +86,20 @@ class Home extends Component {
       });
   };
 
+  //For Playing Notification Sound
   playNotificationSound = (count) => {
     if (count > 0) {
       this.audioRef.current.play();
     }
   };
+
+  logoutUser = e => {
+    firebase.auth().signOut().then(()=> {
+      this.props.history.push('/login'); //Move to Login Route on Logout
+    }).catch(function(error) {
+      console.log(error);
+    });
+  }
   render() {
     return (
       <div className="dashboardform">
@@ -106,6 +125,9 @@ class Home extends Component {
             <button className="link">Refresh</button>
           </a>
         </p>
+        <p>
+          <button className="link" onClick={this.logoutUser}>Logout</button>
+        </p>
         <audio
           webkit-playsinline="true"
           playsInline={true}
@@ -117,5 +139,4 @@ class Home extends Component {
     );
   }
 }
-
-export default Home;
+export default withRouter(Home);

@@ -1,0 +1,31 @@
+.err
+{
+    font-size: 8pt;
+    color: red;
+}
+.form
+{
+    align-self: center;
+    text-align: center;
+}
+
+.form input, .form button
+{
+    margin: 15px;
+    padding: 8px 25px;
+}
+
+p{
+    margin-bottom: 0px;
+}
+
+#home
+{
+    color: blue;
+}
+
+.title
+{
+    position: relative;
+    left: 10px;
+}

@@ -3,6 +3,7 @@ import React, { Component } from "react";
 // import * as firebase from 'firebase';
 import { firestore } from "firebase";
 import { Link, Redirect, withRouter } from "react-router-dom";
+import firebase from "firebase";
 import "./addrecords.css";
 class AddRecord extends Component {
   state = {
@@ -16,6 +17,19 @@ class AddRecord extends Component {
     address: null,
   };
 
+  componentDidMount() {
+    this.getCurrentUser(); //To verify Login
+  }
+
+  getCurrentUser = (e) => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user === null || user === undefined) {
+        this.props.history.push("/login");
+      }
+    });
+  };
+
+  //To handle Input change // Value typed in input fields being recorded to state variables
   handleInputChange = (e) => {
     e.persist();
     this.setState(() => {
@@ -23,6 +37,7 @@ class AddRecord extends Component {
     });
   };
 
+  //Checking whether all required fields are added
   validateInput = () => {
     const {
       name,
@@ -45,6 +60,7 @@ class AddRecord extends Component {
     return false;
   };
 
+  //Add to database
   addRecord = (e) => {
     e.preventDefault();
     if (this.validateInput()) {
@@ -146,5 +162,4 @@ class AddRecord extends Component {
     );
   }
 }
-
 export default withRouter(AddRecord);

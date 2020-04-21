@@ -4,6 +4,7 @@ import { firestore } from "firebase";
 import "./viewRecords.css";
 import { Link, withRouter } from "react-router-dom";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import firebase from "firebase";
 class ViewRecords extends Component {
   state = {
     records: [],
@@ -13,9 +14,19 @@ class ViewRecords extends Component {
   };
 
   componentDidMount() {
+    this.getCurrentUser();
     this.getData();
   }
 
+  getCurrentUser = () => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user === null || user === undefined) {
+        this.props.history.push("/login");
+      }
+    });
+  };
+
+  //Get all records of installations
   getData = () => {
     var db = firestore();
     var recArr = [];
@@ -36,6 +47,7 @@ class ViewRecords extends Component {
       });
   };
 
+  //Search based on Customer Name Column
   search = (e) => {
     this.setState(
       () => {
@@ -58,6 +70,7 @@ class ViewRecords extends Component {
     );
   };
 
+  //For storing text from search box
   handleSearchBox = (e) => {
     e.persist();
     this.setState(
@@ -68,15 +81,19 @@ class ViewRecords extends Component {
     );
   };
 
+  //Resetting the Records table and Search Box
   handleReset = (e) => {
     this.setState(() => {
       return { searchOn: false, searchbox: "" };
     });
   };
+
+  //Moving to Edit page and having Record id as Route parameter
   editRecord = (id) => {
     this.props.history.push("/editrecord/" + id);
   };
 
+  //Deleting the Record on del button click
   deleteRecord = (id) => {
     if (window.confirm("Are you sure you want to delete?")) {
       var db = firestore();
@@ -100,7 +117,6 @@ class ViewRecords extends Component {
         .catch(function (error) {
           console.error("Error removing document: ", error);
         });
-      
     }
   };
   render() {
@@ -155,7 +171,6 @@ class ViewRecords extends Component {
           {" "}
           Reset
         </button>
-
         <table id="records-table">
           <thead>
             <tr>
@@ -175,5 +190,4 @@ class ViewRecords extends Component {
     );
   }
 }
-
 export default withRouter(ViewRecords);

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 // import * as firebase from 'firebase';
 import { firestore } from "firebase";
+import firebase from "firebase";
 
 class EditRecord extends Component {
   state = {
@@ -14,16 +15,25 @@ class EditRecord extends Component {
   };
 
   componentDidMount() {
+    this.getCurrentUser();
     this.getData();
   }
 
+  getCurrentUser = (e) => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user === null || user === undefined) {
+        this.props.history.push("/login");
+      }
+    });
+  };
+  //Saving values from input fields
   handleInputChange = (e) => {
     e.persist();
     this.setState(() => {
       return { [e.target.name]: e.target.value };
     });
   };
-
+  // Checking all required fields are filled
   validateInput = () => {
     const {
       name,
@@ -46,6 +56,7 @@ class EditRecord extends Component {
     return false;
   };
 
+  //Add the edited record to the Database
   addRecord = (e) => {
     e.preventDefault();
     if (this.validateInput()) {
@@ -65,10 +76,6 @@ class EditRecord extends Component {
           .then(() => {
             alert("Record Edited Successfully..!");
             this.props.history.push("/dashboard");
-            // this.setState(
-            //     ()=> { return { redirect: true}},
-            //     ()=> { }
-            // );
           })
           .catch(function (error) {
             console.error("Error Adding Document: ", error);
@@ -78,6 +85,7 @@ class EditRecord extends Component {
     return false;
   };
 
+  //Get record data based on Id from Firestore
   getData = () => {
     var id = this.props.match.params.id;
     var db = firestore();
@@ -101,7 +109,6 @@ class EditRecord extends Component {
             () => {}
           );
         } else {
-          // doc.data() will be undefined in this case
           console.log("No such document!");
         }
       })
@@ -186,5 +193,4 @@ class EditRecord extends Component {
     );
   }
 }
-
 export default withRouter(EditRecord);

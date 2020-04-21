@@ -1,17 +1,28 @@
 import React, { Component } from "react";
 // import * as firebase from "firebase";
 import { firestore } from "firebase";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { getToday } from "../Utils/utilityFunctions";
+import firebase from "firebase";
 class Notification extends Component {
   state = {
     recordsPresent: false,
     records: [],
+    snackBar: false,
   };
 
   componentDidMount() {
-    this.getData();
+    this.getCurrentUser(); //to verify authentication
+    this.getData(); //Get notificationd data from db
   }
+  
+  getCurrentUser = (e) => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user === null || user === undefined) {
+        this.props.history.push("/login");
+      }
+    });
+  };
 
   getData = () => {
     var today = getToday();
@@ -52,7 +63,6 @@ class Notification extends Component {
             recArr.push(obj);
           }
         });
-
         this.setState(
           () => {
             return {
@@ -69,6 +79,7 @@ class Notification extends Component {
       });
   };
 
+  // Status update - pending and completed - store changes to db
   updateStatus = (id, value) => {
     var db = firestore();
     if (window.confirm("Are you sure to Change?")) {
@@ -101,6 +112,7 @@ class Notification extends Component {
         });
     }
   };
+
   render() {
     const recordMapper = this.state.records.map((item, index) => (
       <tr key={index}>
@@ -164,5 +176,4 @@ class Notification extends Component {
     );
   }
 }
-
-export default Notification;
+export default withRouter(Notification);
