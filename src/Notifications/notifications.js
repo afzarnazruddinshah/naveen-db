@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 // import * as firebase from "firebase";
-import  {firestore} from 'firebase';
+import { firestore } from "firebase";
 import { Link } from "react-router-dom";
 import { getToday } from "../Utils/utilityFunctions";
-import { FaEdit, FaTrash } from "react-icons/fa";
 class Notification extends Component {
   state = {
     recordsPresent: false,
@@ -12,33 +11,6 @@ class Notification extends Component {
 
   componentDidMount() {
     this.getData();
-  }
-
-  editRecord = (id) => {
-    this.props.history.push('/editrecord/'+id);
-  }
-
-  deleteRecord = (id) => {
-    if(window.confirm("Are you sure you want to delete?"))
-    {
-        var db = firestore();
-        //Delete From DB
-        db.collection("installations").doc(String(id)).delete().then(()=> {
-            alert("Record Deleted Successfully");
-           var updatedRecords = this.state.records.filter( item => item.id !== id);
-           this.setState(
-               ()=> { return { records: updatedRecords}},
-               ()=> {}
-           );
-           
-        }).catch(function(error) {
-            console.error("Error removing document: ", error);
-        });
-        
-        //Delete from records Array
-       
-
-    }
   }
 
   getData = () => {
@@ -50,8 +22,8 @@ class Notification extends Component {
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-          const idObj = { id: doc.id};
-          const obj = { ...idObj, ...doc.data()};
+          const idObj = { id: doc.id };
+          const obj = { ...idObj, ...doc.data() };
           recArr.push(obj);
         });
         this.setState(
@@ -62,59 +34,75 @@ class Notification extends Component {
               count: recArr.length,
             };
           },
-          () => { }
+          () => {}
         );
       })
-      .catch( (err)=> {
+      .catch((err) => {
         console.log(err);
       });
     db.collection("installations")
-    .where("status", "==", "pending")
-    .get()
-    .then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        const idObj = { id: doc.id};
-        const obj = { ...idObj, ...doc.data()};
-        recArr.push(obj);
-      });
-      // console.log(recArr);
-      // var rec = recArr.concat(this.state.records);
+      .where("status", "==", "pending")
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          const idObj = { id: doc.id };
+          const obj = { ...idObj, ...doc.data() };
+          var a1 = recArr.find((item) => item.id === idObj.id);
+          if (a1 === null || a1 === undefined) {
+            recArr.push(obj);
+          }
+        });
 
-      this.setState(
-        () => {
-          return {
-            records: recArr,
-            recordsPresent: true,
-            count: recArr.length,
-          };
-        },
-        () => { }
-      );
-    })
-    .catch( (err)=> {
-      console.log(err);
-    });
-  }
+        this.setState(
+          () => {
+            return {
+              records: recArr,
+              recordsPresent: true,
+              count: recArr.length,
+            };
+          },
+          () => {}
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   updateStatus = (id, value) => {
-    console.log(id, value);
     var db = firestore();
-    if(window.confirm("Are you sure to Change?"))
-    {
-        var db = firestore();
-        db.collection("installations").doc(String(id)).set({
+    if (window.confirm("Are you sure to Change?")) {
+      db.collection("installations")
+        .doc(String(id))
+        .set(
+          {
             status: value,
-        }, { merge: true })
-        .then(()=> {
-            window.location.reload();
+          },
+          { merge: true }
+        )
+        .then(() => {
+          var records = this.state.records;
+          var updatedRecord = this.state.records.find(
+            (record) => record.id === id
+          );
+          records.pop(updatedRecord);
+          updatedRecord.status = value;
+          records.push(updatedRecord);
+          this.setState(() => {
+            return {
+              records: records,
+              recordsPresent: true,
+              count: records.length,
+            };
+          });
         })
-        .catch(function(error) {
-            console.error("Error Adding Document: ", error);
+        .catch(function (error) {
+          console.error("Error Adding Document: ", error);
         });
     }
-  }
+  };
   render() {
-    const recordMapper = this.state.records.map((item, index) => 
+    const recordMapper = this.state.records.map((item, index) => (
       <tr key={index}>
         <td>{item.custName}</td>
         <td>{item.plantInstalled}</td>
@@ -123,14 +111,16 @@ class Notification extends Component {
         <td>{item.custAddress}</td>
         <td>{item.custPhone}</td>
         <td>
-          <select value={item.status} onChange={(e)=> this.updateStatus(item.id, e.target.value)}>
+          <select
+            value={item.status}
+            onChange={(e) => this.updateStatus(item.id, e.target.value)}
+          >
             <option value="pending">Pending</option>
             <option value="completed">Completed</option>
           </select>
         </td>
-        
       </tr>
-    );
+    ));
     const feed =
       this.state.recordsPresent === true ? (
         recordMapper
