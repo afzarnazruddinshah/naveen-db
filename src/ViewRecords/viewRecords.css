@@ -1,6 +1,5 @@
-#records-table, tr, td
+/* #records-table, tr, td
 {
- border: 1px solid blue;
  padding: 5px;
 }
 
@@ -8,7 +7,7 @@
 {
     border: 2px solid green;
     border-radius: 5px;
-}
+} */
 
 input
 {
@@ -18,4 +17,13 @@ input
 
 #title{
     margin-left: 5px;
+}
+
+.login-form
+{
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+
 }

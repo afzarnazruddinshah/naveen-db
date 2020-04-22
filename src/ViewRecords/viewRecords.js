@@ -1,33 +1,80 @@
-import React, { Component, Fragment } from "react";
+import React, { Component, Fragment, useEffect, useState } from "react";
 // import * as firebase from 'firebase';
 import { firestore } from "firebase";
 import "./viewRecords.css";
 import { Link, withRouter } from "react-router-dom";
-import { FaEdit, FaTrash } from "react-icons/fa";
 import firebase from "firebase";
-class ViewRecords extends Component {
-  state = {
-    records: [],
-    recordsPresent: false,
-    searchbox: "",
-    searchOn: false,
-  };
+//Table 
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+//Material Ui
+import Button from '@material-ui/core/Button';
+import HomeIcon from '@material-ui/icons/Home';
+import SearchIcon from '@material-ui/icons/Search';
+import RefreshIcon from '@material-ui/icons/Refresh';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
+import TextField from '@material-ui/core/TextField';
 
-  componentDidMount() {
-    this.getCurrentUser();
-    this.getData();
-  }
+const useStyles = makeStyles({
+  table: {
+    minWidth: 650,
+  },
+  container: {
+    maxHeight: 500,
+  },
+});
 
-  getCurrentUser = () => {
+const StyledTableCell = withStyles((theme) => ({
+  head: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  body: {
+    fontSize: 14,
+  },
+}))(TableCell);
+
+const StyledTableRow = withStyles((theme) => ({
+  root: {
+    '&:nth-of-type(odd)': {
+      backgroundColor: "#8ECDCC",
+    },
+    '&:nth-of-type(even)': {
+      backgroundColor: "#CD8EBF",
+    },
+  },
+}))(TableRow);
+
+const ViewRecords = (props) => {
+  const classes = useStyles();
+  const [records, setRecords] = useState([]);
+  const [recordsPresent, setRecordsPresent] = useState(false);
+  const [searchBox, setSearchBox] = useState("");
+  const [searchOn, setSearchOn] = useState(false);
+  const [searchRecords, setSearchRecords]= useState([]);
+
+  useEffect( ()=> {
+    getCurrentUser();
+    getData();
+  }, [])
+
+  const getCurrentUser = () => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user === null || user === undefined) {
-        this.props.history.push("/login");
+        props.history.push("/login");
       }
     });
   };
 
   //Get all records of installations
-  getData = () => {
+  const getData = () => {
     var db = firestore();
     var recArr = [];
     db.collection("installations")
@@ -38,63 +85,43 @@ class ViewRecords extends Component {
           const obj = { ...idObj, ...doc.data() };
           recArr.push(obj);
         });
-        this.setState(
-          () => {
-            return { records: recArr, recordsPresent: true };
-          },
-          () => {}
-        );
+        setRecords(recArr);
+        setRecordsPresent(true);
       });
   };
 
   //Search based on Customer Name Column
-  search = (e) => {
-    this.setState(
-      () => {
-        return { searchOn: true };
-      },
-      () => {}
-    );
-    var records = this.state.records.filter((item) => {
+  const search = (e) => {
+    setSearchOn(true);
+    var records1 = records.filter((item) => {
       return (
         String(item.custName)
           .toLowerCase()
-          .search(String(this.state.searchbox).toLowerCase()) !== -1
+          .search(String(searchBox).toLowerCase()) !== -1
       );
     });
-    this.setState(
-      () => {
-        return { searchRecords: records };
-      },
-      () => {}
-    );
+    setSearchRecords(records1);
   };
 
   //For storing text from search box
-  handleSearchBox = (e) => {
+  const handleSearchBox = (e) => {
     e.persist();
-    this.setState(
-      () => {
-        return { searchbox: e.target.value };
-      },
-      () => {}
-    );
+    setSearchBox(e.target.value);
   };
 
   //Resetting the Records table and Search Box
-  handleReset = (e) => {
-    this.setState(() => {
-      return { searchOn: false, searchbox: "" };
-    });
+  const handleReset = (e) => {
+    setSearchOn(false);
+    setSearchBox("");
   };
 
   //Moving to Edit page and having Record id as Route parameter
-  editRecord = (id) => {
-    this.props.history.push("/editrecord/" + id);
+  const editRecord = (id) => {
+    props.history.push("/editrecord/" + id);
   };
 
   //Deleting the Record on del button click
-  deleteRecord = (id) => {
+  const deleteRecord = (id) => {
     if (window.confirm("Are you sure you want to delete?")) {
       var db = firestore();
       //Delete From DB
@@ -104,90 +131,75 @@ class ViewRecords extends Component {
         .then(() => {
           alert("Record Deleted Successfully");
           //Delete from records Array
-          var updatedRecords = this.state.records.filter(
+          var updatedRecords = records.filter(
             (item) => item.id !== id
           );
-          this.setState(
-            () => {
-              return { records: updatedRecords };
-            },
-            () => {}
-          );
+          setRecords(updatedRecords);
         })
         .catch(function (error) {
           console.error("Error removing document: ", error);
         });
     }
   };
-  render() {
-    const dispRecords =
-      this.state.searchOn === true
-        ? this.state.searchRecords
-        : this.state.records;
-    const recordMapper = dispRecords.map((item, index) => (
-      <tr key={item.id}>
-        <td>{item.custName}</td>
-        <td>{item.plantInstalled}</td>
-        <td>{item.dateOfInstallment}</td>
-        <td>{item.nextServiceDate}</td>
-        <td>{item.custAddress}</td>
-        <td>{item.custPhone}</td>
-        <td onClick={() => this.editRecord(item.id)}>
-          <FaEdit />
-        </td>
-        <td onClick={() => this.deleteRecord(item.id)}>
-          <FaTrash />
-        </td>
-      </tr>
-    ));
-    const feed =
-      this.state.recordsPresent === true ? (
+
+  const dispRecords =
+      searchOn === true
+        ? searchRecords
+        : records;
+  const recordMapper = dispRecords.map((item) => (
+    <StyledTableRow key={item.id}>
+        <StyledTableCell component="th" scope="row">{ item.custName}</StyledTableCell>
+        <StyledTableCell align="right">{item.plantInstalled}</StyledTableCell>
+        <StyledTableCell align="right">{item.dateOfInstallment}</StyledTableCell>
+        <StyledTableCell align="right">{item.nextServiceDate}</StyledTableCell>
+        <StyledTableCell align="right">{item.custAddress}</StyledTableCell>
+        <StyledTableCell align="right">{item.custPhone}</StyledTableCell>
+        <StyledTableCell onClick={() => editRecord(item.id)} align="right"><EditIcon /></StyledTableCell>
+        <StyledTableCell onClick={() => deleteRecord(item.id)} align="right"><DeleteIcon /></StyledTableCell>
+    </StyledTableRow>
+  ));
+
+  const feed =
+      recordsPresent === true ? (
         recordMapper
       ) : (
-        <tr>
-          <td>Loading</td>
-        </tr>
+        <TableRow>
+          <TableCell>Loading</TableCell>
+        </TableRow>
       );
     return (
-      <Fragment>
+      <div className="login-form">
         <p>
           <Link to="/dashboard">
-            <button id="home">{"< Go To Dashboard"}</button>
+          <Button color="secondary" variant="contained"><HomeIcon />&nbsp;{" Go To Dashboard"}</Button>
           </Link>
         </p>
         <h2 id="title">Viewing All Records</h2>
-        <input
-          id=""
-          value={this.state.searchbox}
-          placeholder="search"
-          type="text"
-          name="searchbox"
-          onChange={this.handleSearchBox}
-        />
-        <button type="button" onClick={this.search}>
-          Search
-        </button>
-        <button type="button" onClick={this.handleReset}>
-          {" "}
-          Reset
-        </button>
-        <table id="records-table">
-          <thead>
-            <tr>
-              <td>Name</td>
-              <td>Plant Installed</td>
-              <td>Date of Installment</td>
-              <td>Next Service Date</td>
-              <td>Address</td>
-              <td>Phone</td>
-              <td>Edit</td>
-              <td>Delete</td>
-            </tr>
-          </thead>
-          <tbody>{feed}</tbody>
-        </table>
-      </Fragment>
+        <TextField value={searchBox} label="Search any record" type="text" name="searchbox" onChange={handleSearchBox} /> &nbsp; &nbsp;
+        <Button color="primary" variant="contained" type="button" onClick={search}><SearchIcon /></Button>&nbsp; {"  "}{" "}
+        <Button color="primary" variant="contained" type="button" onClick={handleReset}><RefreshIcon /></Button>
+        <div><div>&nbsp;</div></div>
+        <div><div>&nbsp;</div></div>
+        <TableContainer className={classes.container} component={Paper}>
+          <Table className={classes.table} stickyHeader size="small" aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell align="right">Name</StyledTableCell>
+                <StyledTableCell align="right">Plant Installed</StyledTableCell>
+                <StyledTableCell align="right">Date of Installment</StyledTableCell>
+                <StyledTableCell align="right">Next Service Date</StyledTableCell>
+                <StyledTableCell align="right">Address</StyledTableCell>
+                <StyledTableCell align="right">Phone</StyledTableCell>
+                <StyledTableCell align="right">Edit</StyledTableCell>
+                <StyledTableCell align="right">Delete</StyledTableCell>
+              </TableRow>
+            </TableHead>
+          <TableBody>
+            {feed}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </div>
     );
   }
-}
 export default withRouter(ViewRecords);

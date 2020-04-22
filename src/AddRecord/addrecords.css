@@ -18,3 +18,17 @@ p{
 {
     color: blue;
 }
+
+a{
+    outline: none;
+    text-decoration: none;
+}
+
+.login-form
+{
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+
+}

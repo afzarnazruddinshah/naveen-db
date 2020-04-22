@@ -19,3 +19,14 @@
     margin: 15px;
     padding: 20px 30px;
 }
+
+a
+{
+    outline: none;
+    text-transform: none;
+}
+
+button
+{
+    padding: 10px 20px;
+}

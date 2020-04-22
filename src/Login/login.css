@@ -1,18 +1,8 @@
-.err
-{
-    font-size: 8pt;
-    color: red;
-}
+
 .form
 {
     align-self: center;
     text-align: center;
-}
-
-.form input, .form button
-{
-    margin: 15px;
-    padding: 8px 25px;
 }
 
 p{
@@ -28,4 +18,23 @@ p{
 {
     position: relative;
     left: 10px;
+}
+
+.login-form
+{
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+
+}
+
+.red
+{
+    color: red
+}
+
+.stmt
+{
+    font-size: 12pt;
 }

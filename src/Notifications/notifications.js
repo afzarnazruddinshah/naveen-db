@@ -1,30 +1,89 @@
-import React, { Component } from "react";
+import React, { Component, useState, useEffect } from "react";
 // import * as firebase from "firebase";
 import { firestore } from "firebase";
 import { Link, withRouter } from "react-router-dom";
 import { getToday } from "../Utils/utilityFunctions";
 import firebase from "firebase";
-class Notification extends Component {
-  state = {
-    recordsPresent: false,
-    records: [],
-    snackBar: false,
-  };
+import HomeIcon from '@material-ui/icons/Home';
+import './notifications.css';
+//Table 
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
+//Drop Down
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+//Notification Badge
+import Badge from '@material-ui/core/Badge';
+import NotificationsIcon from '@material-ui/icons/Notifications';
 
-  componentDidMount() {
-    this.getCurrentUser(); //to verify authentication
-    this.getData(); //Get notificationd data from db
-  }
+const useStyles2 = makeStyles((theme) => ({
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
+}));
+const useStyles = makeStyles({
+  table: {
+    minWidth: 650,
+  },
+  container: {
+    maxHeight: 440,
+  },
+});
+
+const StyledTableCell = withStyles((theme) => ({
+  head: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  body: {
+    fontSize: 14,
+  },
+}))(TableCell);
+
+const StyledTableRow = withStyles((theme) => ({
+  root: {
+    '&:nth-of-type(odd)': {
+      backgroundColor: "#8ECDCC",
+    },
+    '&:nth-of-type(even)': {
+      backgroundColor: "#CD8EBF",
+    },
+  },
+}))(TableRow);
+const Notification = (props) => {
+  const classes = useStyles();
+  const ddclasses = useStyles2();
+
+  const [recordsPresent, setRecordsPresent] = useState(false);
+  const [records, setRecords] = useState([]);
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    getCurrentUser(); //to verify authentication
+    getData(); //Get notificationd data from db
+  });
   
-  getCurrentUser = (e) => {
+  const getCurrentUser = (e) => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user === null || user === undefined) {
-        this.props.history.push("/login");
+        props.history.push("/login");
       }
     });
   };
 
-  getData = () => {
+  const getData = () => {
     var today = getToday();
     var db = firestore();
     var recArr = [];
@@ -37,16 +96,7 @@ class Notification extends Component {
           const obj = { ...idObj, ...doc.data() };
           recArr.push(obj);
         });
-        this.setState(
-          () => {
-            return {
-              records: recArr,
-              recordsPresent: true,
-              count: recArr.length,
-            };
-          },
-          () => {}
-        );
+        setRecordsPresent(true); setRecords(recArr); setCount(recArr.length);
       })
       .catch((err) => {
         console.log(err);
@@ -63,16 +113,7 @@ class Notification extends Component {
             recArr.push(obj);
           }
         });
-        this.setState(
-          () => {
-            return {
-              records: recArr,
-              recordsPresent: true,
-              count: recArr.length,
-            };
-          },
-          () => {}
-        );
+        setRecordsPresent(true); setRecords(recArr); setCount(recArr.length);
       })
       .catch((err) => {
         console.log(err);
@@ -80,7 +121,7 @@ class Notification extends Component {
   };
 
   // Status update - pending and completed - store changes to db
-  updateStatus = (id, value) => {
+  const updateStatus = (id, value) => {
     var db = firestore();
     if (window.confirm("Are you sure to Change?")) {
       db.collection("installations")
@@ -99,13 +140,7 @@ class Notification extends Component {
           records.pop(updatedRecord);
           updatedRecord.status = value;
           records.push(updatedRecord);
-          this.setState(() => {
-            return {
-              records: records,
-              recordsPresent: true,
-              count: records.length,
-            };
-          });
+          setRecordsPresent(true); setRecords(records); setCount(records.length);
         })
         .catch(function (error) {
           console.error("Error Adding Document: ", error);
@@ -113,36 +148,40 @@ class Notification extends Component {
     }
   };
 
-  render() {
-    const recordMapper = this.state.records.map((item, index) => (
-      <tr key={index}>
-        <td>{item.custName}</td>
-        <td>{item.plantInstalled}</td>
-        <td>{item.dateOfInstallment}</td>
-        <td>{item.nextServiceDate}</td>
-        <td>{item.custAddress}</td>
-        <td>{item.custPhone}</td>
-        <td>
-          <select
-            value={item.status}
-            onChange={(e) => this.updateStatus(item.id, e.target.value)}
-          >
-            <option value="pending">Pending</option>
-            <option value="completed">Completed</option>
-          </select>
-        </td>
-      </tr>
+    const recordMapper = records.map((item, index) => (
+      <StyledTableRow key={index}>
+        <StyledTableCell>{item.custName}</StyledTableCell>
+        <StyledTableCell>{item.plantInstalled}</StyledTableCell>
+        <StyledTableCell>{item.dateOfInstallment}</StyledTableCell>
+        <StyledTableCell>{item.nextServiceDate}</StyledTableCell>
+        <StyledTableCell>{item.custAddress}</StyledTableCell>
+        <StyledTableCell>{item.custPhone}</StyledTableCell>
+        <StyledTableCell>
+          <FormControl className={ddclasses.formControl}>
+            <Select
+              defaultValue={"pending"}
+              value={item.status}
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              onChange={(e) => updateStatus(item.id, e.target.value)}
+            >
+              <MenuItem value="pending">Pending</MenuItem>
+              <MenuItem value="completed">Completed</MenuItem>
+            </Select>
+          </FormControl>
+        </StyledTableCell>
+      </StyledTableRow>
     ));
     const feed =
-      this.state.recordsPresent === true ? (
+      recordsPresent === true ? (
         recordMapper
       ) : (
-        <tr>
-          <td>Loading</td>
-        </tr>
+        <StyledTableRow>
+          <StyledTableCell>Loading</StyledTableCell>
+        </StyledTableRow>
       );
     const feed2 =
-      this.state.count === 0 ? (
+      count === 0 ? (
         <tr>
           <td>No Notification</td>
         </tr>
@@ -150,30 +189,38 @@ class Notification extends Component {
         feed
       );
 
+      const badgeProps = {
+        color: 'secondary',
+        children: <NotificationsIcon />,
+      };
+
     return (
-      <React.Fragment>
+      <div className="login-form">
         <p>
           <Link to="/dashboard">
-            <button id="home">{"< Go To Dashboard"}</button>
+          <Button color="secondary" variant="contained"><HomeIcon />&nbsp;{" Go To Dashboard"}</Button>
           </Link>
         </p>
-        <p>Notifications ({this.state.count})</p>
-        <table id="records-table">
-          <thead>
-            <tr>
-              <td>Name</td>
-              <td>Plant Installed</td>
-              <td>Date of Installment</td>
-              <td>Next Service Date</td>
-              <td>Address</td>
-              <td>Phone</td>
-              <td>Status</td>
-            </tr>
-          </thead>
-          <tbody>{feed2}</tbody>
-        </table>
-      </React.Fragment>
+        <h2>Notifications <Badge color="secondary" badgeContent={count} {...badgeProps}></Badge></h2>
+        <TableContainer className={classes.container} component={Paper}>
+          <Table className={classes.table} stickyHeader size="small" aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell align="right">Name</StyledTableCell>
+                <StyledTableCell align="right">Plant Installed</StyledTableCell>
+                <StyledTableCell align="right">Date of Installment</StyledTableCell>
+                <StyledTableCell align="right">Next Service Date</StyledTableCell>
+                <StyledTableCell align="right">Address</StyledTableCell>
+                <StyledTableCell align="right">Phone</StyledTableCell>
+                <StyledTableCell align="right">Status</StyledTableCell>
+              </TableRow>
+            </TableHead>
+          <TableBody>
+            {feed2}
+          </TableBody>
+          </Table>
+          </TableContainer>
+      </div>
     );
-  }
 }
 export default withRouter(Notification);

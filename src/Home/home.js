@@ -1,33 +1,55 @@
-import React, { Component } from "react";
-import { Link , withRouter} from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { Link, withRouter } from "react-router-dom";
 import { firestore } from "firebase";
 import { getToday } from "../Utils/utilityFunctions";
 import "./home.css";
-import firebase from 'firebase';
-class Home extends Component {
-  state = {
-    count: 0,
+import firebase from "firebase";
+import Button from "@material-ui/core/Button";
+//Notification Badge
+import Badge from "@material-ui/core/Badge";
+import NotificationsIcon from "@material-ui/icons/Notifications";
+import { makeStyles } from "@material-ui/core/styles";
+import Alert from "@material-ui/lab/Alert";
+
+const useStylesAlert = makeStyles((theme) => ({
+  root: {
+    width: "100%",
+    "& > * + *": {
+      marginTop: theme.spacing(2),
+      alignContent: "center",
+      textAlign: "center",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+  },
+}));
+
+const Home = (props) => {
+  const alertClasses = useStylesAlert();
+  const [count, setCount] = useState(0);
+  const [records, setRecords] = useState([]);
+  const [recordsPresent, setRecordsPresent] = useState(false);
+  const audioRef = useRef(document.createElement("audio"));
+
+  const badgeProps = {
+    color: "secondary",
+    children: <NotificationsIcon />,
   };
-  constructor(props) {
-    super(props);
-    this.audioRef = React.createRef(); //For Notification Audio Tag
-  }
 
-  componentDidMount()
-  {
-      this.getCurrentUser(); //To Verify Authentication
-  }
+  useEffect(() => {
+    getCurrentUser();
+  }, []);
 
-  getCurrentUser = e => {
-    firebase.auth().onAuthStateChanged(user => {
-      if (user === null || user === undefined) 
-      {
-        this.props.history.push('/login');
-      } 
+  const getCurrentUser = (e) => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user === null || user === undefined) {
+        props.history.push("/login");
+      }
     });
-  }
+  };
+
   //For Getting the notification Count on Refresh button click
-  getNotificationCount = () => {
+  const getNotificationCount = () => {
     var today = getToday();
     var db = firestore();
     var recArr = [];
@@ -41,16 +63,9 @@ class Home extends Component {
           const obj = { ...idObj, ...doc.data() };
           recArr.push(obj);
         });
-        this.setState(
-          () => {
-            return {
-              records: recArr,
-              recordsPresent: true,
-              count: recArr.length,
-            };
-          },
-          () => {}
-        );
+        setRecords(recArr);
+        setRecordsPresent(true);
+        setCount(recArr.length);
       })
       .catch((err) => {
         console.log(err);
@@ -68,18 +83,10 @@ class Home extends Component {
             recArr.push(obj);
           }
         });
-        this.setState(
-          () => {
-            return {
-              records: recArr,
-              recordsPresent: true,
-              count: recArr.length,
-            };
-          },
-          () => {
-            this.playNotificationSound(this.state.count);
-          }
-        );
+        setRecords(recArr);
+        setRecordsPresent(true);
+        setCount(recArr.length);
+        playNotificationSound(recArr.length);
       })
       .catch((err) => {
         console.log(err);
@@ -87,56 +94,140 @@ class Home extends Component {
   };
 
   //For Playing Notification Sound
-  playNotificationSound = (count) => {
+  const playNotificationSound = (count) => {
     if (count > 0) {
-      this.audioRef.current.play();
+      audioRef.current.play();
     }
   };
 
-  logoutUser = e => {
-    firebase.auth().signOut().then(()=> {
-      this.props.history.push('/login'); //Move to Login Route on Logout
-    }).catch(function(error) {
-      console.log(error);
-    });
-  }
-  render() {
-    return (
-      <div className="dashboardform">
-        <h2>Welcome to Naveen's DB</h2>
-        <p>
-          <Link to="/addrecords">
-            <button className="link">Add Records</button>
-          </Link>{" "}
-        </p>
-        <p>
-          <Link to="/viewrecords">
-            <button className="link">View Records</button>
-          </Link>
-        </p>
-        <p>
-          <Link to="/notifications">
-            <button className="link">Notifications ({this.state.count})</button>
-          </Link>{" "}
-        </p>
-        <p>
-          {" "}
-          <a href="##" onClick={this.getNotificationCount}>
-            <button className="link">Refresh</button>
-          </a>
-        </p>
-        <p>
-          <button className="link" onClick={this.logoutUser}>Logout</button>
-        </p>
-        <audio
-          webkit-playsinline="true"
-          playsInline={true}
-          ref={this.audioRef}
-          id="notificationSound"
-          src="https://notificationsounds.com/soundfiles/b2f627fff19fda463cb386442eac2b3d/file-sounds-1142-inflicted.mp3"
-        />
+  const logoutUser = (e) => {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        props.history.push("/login"); //Move to Login Route on Logout
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  return (
+    <div className="dashboardform">
+      <h2>Welcome to Naveen's DB</h2>
+      <div>
+        <div>&nbsp;</div>
       </div>
-    );
-  }
-}
+      <div>
+        <div>&nbsp;</div>
+      </div>
+      <div>
+        <div>&nbsp;</div>
+      </div>
+      <p>
+        <Link to="/addrecords">
+          <Button
+            size="large"
+            variant="contained"
+            color="primary"
+            type="button"
+          >
+            Add Records
+          </Button>
+        </Link>{" "}
+      </p>
+      <div>
+        <div>&nbsp;</div>
+      </div>
+      <div>
+        <div>&nbsp;</div>
+      </div>
+      <p>
+        <Link to="/viewrecords">
+          <Button
+            size="large"
+            variant="contained"
+            color="primary"
+            type="button"
+          >
+            View Records
+          </Button>
+        </Link>
+      </p>
+      <div>
+        <div>&nbsp;</div>
+      </div>
+      <div>
+        <div>&nbsp;</div>
+      </div>
+      <p>
+        <Link to="/notifications">
+          <Button
+            size="large"
+            variant="contained"
+            color="primary"
+            type="button"
+          >
+            Notifications &nbsp;{" "}
+            <Badge
+              max={10}
+              color="secondary"
+              badgeContent={count}
+              {...badgeProps}
+            ></Badge>
+          </Button>
+        </Link>{" "}
+      </p>
+      <div>
+        <div>&nbsp;</div>
+      </div>
+      <div>
+        <div>&nbsp;</div>
+      </div>
+      <p>
+        {" "}
+        <Button
+          onClick={getNotificationCount}
+          size="large"
+          variant="contained"
+          color="primary"
+          type="button"
+        >
+          Refresh
+        </Button>
+      </p>
+      <div>
+        <div>&nbsp;</div>
+      </div>
+      <div>
+        <div>&nbsp;</div>
+      </div>
+      <p>
+        <Button
+          size="large"
+          variant="contained"
+          color="secondary"
+          onClick={logoutUser}
+        >
+          Logout
+        </Button>
+      </p>
+      <div>
+        <div>&nbsp;</div>
+      </div>
+      <div className={alertClasses.root}>
+        <Alert severity="info">
+          Click on Refresh button to get Notifications
+        </Alert>
+      </div>
+      <audio
+        webkit-playsinline="true"
+        playsInline={true}
+        ref={audioRef}
+        id="notificationSound"
+        src="https://notificationsounds.com/soundfiles/acc3e0404646c57502b480dc052c4fe1/file-sounds-1140-just-saying.mp3"
+      />
+    </div>
+  );
+};
 export default withRouter(Home);
