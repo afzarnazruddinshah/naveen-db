@@ -10,6 +10,11 @@ import Badge from "@material-ui/core/Badge";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import { makeStyles } from "@material-ui/core/styles";
 import Alert from "@material-ui/lab/Alert";
+import GetAppIcon from '@material-ui/icons/GetApp';
+import * as alasql from 'alasql';
+var XLSX = require('xlsx')
+alasql.setXLSX(XLSX);
+
 
 const useStylesAlert = makeStyles((theme) => ({
   root: {
@@ -30,6 +35,8 @@ const Home = (props) => {
   const [records, setRecords] = useState([]);
   const [recordsPresent, setRecordsPresent] = useState(false);
   const audioRef = useRef(document.createElement("audio"));
+  const [totalRecords, setTotalRecords] = React.useState([]);
+
 
   const badgeProps = {
     color: "secondary",
@@ -99,6 +106,25 @@ const Home = (props) => {
     if (count > 0) {
       audioRef.current.play();
     }
+  };
+
+  const exportFile = () => {
+    var db = firestore();
+    var recArr = [];
+    //extract data
+    db.collection("installations")
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          const idObj = { id: doc.id };
+          const obj = { ...idObj, ...doc.data() };
+          recArr.push(obj);
+        });
+        console.log(recArr);
+        var opts = [{sheetid:'On Time Service Records',header:true}];
+        var res = alasql('SELECT * INTO XLSX("OnTimeServiceRecords.xlsx",?) FROM ?',
+                    [opts,[recArr]]);
+      });
   };
 
   const logoutUser = (e) => {
@@ -185,6 +211,18 @@ const Home = (props) => {
       <div>
         <div>&nbsp;</div>
       </div>
+      <Button 
+        color="primary" 
+        variant="contained"
+        onClick={exportFile}>
+        Export As File&nbsp; {" "}{" "} <GetAppIcon/>
+      </Button>
+      <div>
+        <div>&nbsp;</div>
+      </div>
+      <div>
+        <div>&nbsp;</div>
+      </div>
       <p>
         <Button
           size="large"
@@ -197,11 +235,6 @@ const Home = (props) => {
       </p>
       <div>
         <div>&nbsp;</div>
-      </div>
-      <div className={alertClasses.root}>
-        <Alert severity="info">
-          Click on Refresh button to get Notifications
-        </Alert>
       </div>
       <audio
         webkit-playsinline="true"

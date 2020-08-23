@@ -199,7 +199,6 @@ class EditRecord extends Component {
               placeholder="Next Service Date"
               onChange={this.handleInputChange}
               name="nextservicedate"
-              required
             />
             <p htmlFor="natureOfWork">Nature Of Work:</p>
             <input

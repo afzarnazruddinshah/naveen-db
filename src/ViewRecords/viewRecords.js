@@ -21,7 +21,6 @@ import RefreshIcon from '@material-ui/icons/Refresh';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import TextField from '@material-ui/core/TextField';
-
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
@@ -206,7 +205,8 @@ const ViewRecords = (props) => {
           <Button color="secondary" variant="contained"><HomeIcon />&nbsp;{" Go To Dashboard"}</Button>
           </Link>
         </p>
-        <h2 id="title">Viewing All Records</h2>
+        <h2 id="title">
+          Viewing All Records</h2>
         <TextField value={searchBox} label="Search any record" type="text" name="searchbox" onChange={handleSearchBox} /> &nbsp; &nbsp;
         <Button color="primary" variant="contained" type="button" onClick={search}><SearchIcon /></Button>&nbsp; {"  "}{" "}
         <Button color="primary" variant="contained" type="button" onClick={handleReset}><RefreshIcon /></Button>

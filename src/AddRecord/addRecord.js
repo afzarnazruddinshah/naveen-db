@@ -14,6 +14,8 @@ import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
+import Input from '@material-ui/core/Input';
+
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -50,9 +52,9 @@ const AddRecord = (props) => {
   const [brandModel, setBrandModel] = React.useState(null);
   const [amountReceived, setAmountReceived] = React.useState(null);
   const [recommendedBy, setRecommendedBy] = React.useState(null);
+  const [billImage, setBillImage] = React.useState(null);
   useEffect(() => {
     getCurrentUser();
-    console.log("count");
   });
 
   const getCurrentUser = (e) => {
@@ -97,6 +99,9 @@ const AddRecord = (props) => {
       case "recommendedby":
         setRecommendedBy(e.target.value);
         break; 
+      case "billimage":
+        setBillImage(e.target.files[0]);
+        break;
       default:
         break;
     }
@@ -120,6 +125,18 @@ const AddRecord = (props) => {
 
   //Add to database
   const addRecord = (e) => {
+    //uploading images to firebase
+    // var storage = firebase.storage();
+    // var storageRef = storage.ref();
+    // var imagesRef = storageRef.child('bill-images');
+    // imagesRef.put(billImage).then(function(snapshot) {
+    //   console.log('Uploaded a blob or file!');
+    // });
+    // var data1 = [{a:1,b:10},{a:2,b:20}];
+    // var data2 = [{a:100,b:10},{a:200,b:20}];
+    // var opts = [{sheetid:'One',header:true},{sheetid:'Two',header:false}];
+    // var res = alasql('SELECT * INTO XLSX("restest344b.xlsx",?) FROM ?',
+    //                  [opts,[data1,data2]]);
     e.preventDefault();
     if (validateInput()) {
       if (window.confirm("Are you sure you want to add this Record?")) {
@@ -262,6 +279,22 @@ const AddRecord = (props) => {
           label="Recommended By"
           required={true}
         />
+        {/* <Input 
+          name="billimage"
+          type="file"
+          placeholder="Bill Image"
+          onChange={handleInputChange}
+          label="Bill image"
+          /> */}
+        <div>
+          <div></div>&nbsp;
+        </div>
+        <div>
+          <div></div>&nbsp;
+        </div>
+        <div>
+          <div></div>&nbsp;
+        </div>
         <Button
           color="primary"
           variant="contained"
