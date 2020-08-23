@@ -100,7 +100,36 @@ const ViewRecords = (props) => {
           .search(String(searchBox).toLowerCase()) !== -1
       );
     });
-    setSearchRecords(records1);
+    var records2 = records.filter((item)=>{
+      return (
+        String(item.product)
+          .toLowerCase()
+          .search(String(searchBox).toLowerCase()) !== -1
+      )
+    });
+    var records3 = records.filter((item)=>{
+      return (
+        String(item.custPhone)
+          .toLowerCase()
+          .search(String(searchBox).toLowerCase()) !== -1
+      )
+    });
+    var records4 = records.filter((item)=>{
+      return (
+        String(item.brandModel)
+          .toLowerCase()
+          .search(String(searchBox).toLowerCase()) !== -1
+      )
+    });
+    var records5 = records.filter((item)=>{
+      return (
+        String(item.recommendedBy)
+          .toLowerCase()
+          .search(String(searchBox).toLowerCase()) !== -1
+      )
+    });
+    var resRecords = records1.concat(records2, records3,records4,records5);
+    setSearchRecords(resRecords);
   };
 
   //For storing text from search box
@@ -149,11 +178,14 @@ const ViewRecords = (props) => {
   const recordMapper = dispRecords.map((item) => (
     <StyledTableRow key={item.id}>
         <StyledTableCell component="th" scope="row">{ item.custName}</StyledTableCell>
-        <StyledTableCell align="right">{item.plantInstalled}</StyledTableCell>
+        <StyledTableCell align="right">{item.custPhone}</StyledTableCell>
+        <StyledTableCell align="right">{item.product}</StyledTableCell>
         <StyledTableCell align="right">{item.dateOfInstallment}</StyledTableCell>
         <StyledTableCell align="right">{item.nextServiceDate}</StyledTableCell>
-        <StyledTableCell align="right">{item.custAddress}</StyledTableCell>
-        <StyledTableCell align="right">{item.custPhone}</StyledTableCell>
+        <StyledTableCell align="right">{item.natureOfWork}</StyledTableCell>
+        <StyledTableCell align="right">{item.brandModel}</StyledTableCell>
+        <StyledTableCell align="right">{item.amountReceived}</StyledTableCell>
+        <StyledTableCell align="right">{item.recommendedBy}</StyledTableCell>
         <StyledTableCell onClick={() => editRecord(item.id)} align="right"><EditIcon /></StyledTableCell>
         <StyledTableCell onClick={() => deleteRecord(item.id)} align="right"><DeleteIcon /></StyledTableCell>
     </StyledTableRow>
@@ -184,12 +216,15 @@ const ViewRecords = (props) => {
           <Table className={classes.table} stickyHeader size="small" aria-label="sticky table">
             <TableHead>
               <TableRow>
-                <StyledTableCell align="right">Name</StyledTableCell>
-                <StyledTableCell align="right">Plant Installed</StyledTableCell>
-                <StyledTableCell align="right">Date of Installment</StyledTableCell>
-                <StyledTableCell align="right">Next Service Date</StyledTableCell>
-                <StyledTableCell align="right">Address</StyledTableCell>
+                <StyledTableCell align="right">Name and Address</StyledTableCell>
                 <StyledTableCell align="right">Phone</StyledTableCell>
+                <StyledTableCell align="right">Product</StyledTableCell>
+                <StyledTableCell align="right">Date </StyledTableCell>
+                <StyledTableCell align="right">Next Due Date</StyledTableCell>
+                <StyledTableCell align="right">Nature Of Work</StyledTableCell>
+                <StyledTableCell align="right">Brand and Model</StyledTableCell>
+                <StyledTableCell align="right">Amount Received</StyledTableCell>
+                <StyledTableCell align="right">Recommended By</StyledTableCell>
                 <StyledTableCell align="right">Edit</StyledTableCell>
                 <StyledTableCell align="right">Delete</StyledTableCell>
               </TableRow>

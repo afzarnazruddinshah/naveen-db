@@ -10,6 +10,11 @@ import HomeIcon from "@material-ui/icons/Home";
 import SaveIcon from "@material-ui/icons/Save";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+
 const useStyles = makeStyles((theme) => ({
   container: {
     display: "flex",
@@ -22,16 +27,29 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const selectStyles = makeStyles((theme) => ({
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
+}));
 // class AddRecord extends Component
 const AddRecord = (props) => {
   const classes = useStyles();
+  const selectClasses = useStyles();
   const [name, setName] = useState(null);
   const [number, setNumber] = useState(null);
   const [model, setModel] = useState(null);
   const [dateofinstallment, setDateOfInstallment] = useState(null);
   const [nextservicedate, setNextServiceDate] = useState(null);
-  const [address, setAddress] = useState(null);
-
+  const [natureOfWork, setNatureOfWork] = useState(null);
+  const [product, setProduct] = React.useState('select');
+  const [brandModel, setBrandModel] = React.useState(null);
+  const [amountReceived, setAmountReceived] = React.useState(null);
+  const [recommendedBy, setRecommendedBy] = React.useState(null);
   useEffect(() => {
     getCurrentUser();
     console.log("count");
@@ -64,9 +82,21 @@ const AddRecord = (props) => {
       case "nextservicedate":
         setNextServiceDate(e.target.value);
         break;
-      case "address":
-        setAddress(e.target.value);
+      case "natureofwork":
+        setNatureOfWork(e.target.value);
         break;
+      case "product":
+        setProduct(e.target.value);
+        break;
+      case "brandmodel":
+        setBrandModel(e.target.value);
+        break;
+      case "amountreceived":
+        setAmountReceived(e.target.value);
+        break;
+      case "recommendedby":
+        setRecommendedBy(e.target.value);
+        break; 
       default:
         break;
     }
@@ -77,10 +107,11 @@ const AddRecord = (props) => {
     if (
       name !== null &&
       number !== null &&
-      model !== null &&
       dateofinstallment !== null &&
-      nextservicedate !== null &&
-      address !== null
+      natureOfWork !== null &&
+      brandModel !== null &&
+      amountReceived !== null &&
+      recommendedBy !== null
     ) {
       return true;
     }
@@ -97,10 +128,13 @@ const AddRecord = (props) => {
           .add({
             custName: name,
             custPhone: number,
-            plantInstalled: model,
+            product: product,
             dateOfInstallment: dateofinstallment,
             nextServiceDate: nextservicedate,
-            custAddress: address,
+            natureOfWork: natureOfWork,
+            brandModel: brandModel,
+            amountReceived:amountReceived,
+            recommendedBy:recommendedBy
           })
           .then(() => {
             alert("Record Added Successfully..!");
@@ -133,7 +167,7 @@ const AddRecord = (props) => {
           name="name"
           type="text"
           onChange={handleInputChange}
-          label="Customer Name"
+          label="Customer Name, Addr"
           required={true}
         />
         <div>
@@ -149,13 +183,24 @@ const AddRecord = (props) => {
         <div>
           <div></div>&nbsp;
         </div>
-        <TextField
-          name="model"
-          type="text"
+        <FormControl className={selectClasses.formControl}>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          name="product"
+          value={product}
           onChange={handleInputChange}
-          label="RO Plant Model"
-          required={true}
-        />
+        >
+          <MenuItem value={'select'} disabled>Select a Product</MenuItem>
+          <MenuItem value={'Air Conditioner'}>Air Conditioner</MenuItem>
+          <MenuItem value={'RO'}>RO</MenuItem>
+          <MenuItem value={'Washing Machine'}>Washing Machine</MenuItem>
+          <MenuItem value={'Refrigerator'}>Refrigerator</MenuItem>
+          <MenuItem value={'TV'}>TV</MenuItem>
+          <MenuItem value={'Microwave Oven'}>Microwave Oven</MenuItem>
+          <MenuItem value={'Others'}>Others</MenuItem>
+        </Select>
+        </FormControl>
         <div>
           <div></div>&nbsp;
         </div>
@@ -164,7 +209,7 @@ const AddRecord = (props) => {
           name="dateofinstallment"
           type="date"
           onChange={handleInputChange}
-          label="Date of Installment"
+          label="Date"
           required={true}
         />
         <div>
@@ -175,28 +220,48 @@ const AddRecord = (props) => {
           name="nextservicedate"
           type="date"
           onChange={handleInputChange}
-          label="Next Service Date"
+          label="Next Due Date"
+        />
+        <div>
+          <div></div>&nbsp;
+        </div>
+        <TextField
+          name="natureofwork"
+          type="text"
+          onChange={handleInputChange}
+          label="Nature of Work"
           required={true}
         />
         <div>
           <div></div>&nbsp;
         </div>
         <TextField
-          name="address"
+          name="brandmodel"
           type="text"
           onChange={handleInputChange}
-          label="Customer Address"
+          label="Brand and Model"
           required={true}
         />
         <div>
           <div></div>&nbsp;
         </div>
+        <TextField
+          name="amountreceived"
+          type="text"
+          onChange={handleInputChange}
+          label="Amount Received"
+          required={true}
+        />
         <div>
           <div></div>&nbsp;
         </div>
-        <div>
-          <div></div>&nbsp;
-        </div>
+        <TextField
+          name="recommendedby"
+          type="text"
+          onChange={handleInputChange}
+          label="Recommended By"
+          required={true}
+        />
         <Button
           color="primary"
           variant="contained"

@@ -3,15 +3,21 @@ import { Link, withRouter } from "react-router-dom";
 // import * as firebase from 'firebase';
 import { firestore } from "firebase";
 import firebase from "firebase";
-
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
 class EditRecord extends Component {
   state = {
     name: "",
     number: "",
-    model: "",
-    address: "",
+    product: "",
     dateofinstallment: "",
     nextservicedate: "",
+    natureOfWork: "",
+    brandModel: "",
+    amountReceived: "",
+    recommendedBy: "",
   };
 
   componentDidMount() {
@@ -38,18 +44,24 @@ class EditRecord extends Component {
     const {
       name,
       number,
-      model,
+      product,
       dateofinstallment,
       nextservicedate,
-      address,
+      natureOfWork,
+      brandModel,
+      amountReceived,
+      recommendedBy
     } = this.state;
     if (
       name !== null &&
       number !== null &&
-      model !== null &&
+      product !== null &&
       dateofinstallment !== null &&
       nextservicedate !== null &&
-      address !== null
+      natureOfWork !== null &&
+      brandModel !== null &&
+      amountReceived !== null &
+      recommendedBy !== null
     ) {
       return true;
     }
@@ -68,10 +80,13 @@ class EditRecord extends Component {
           .set({
             custName: this.state.name,
             custPhone: this.state.number,
-            plantInstalled: this.state.model,
+            product: this.state.product,
             dateOfInstallment: this.state.dateofinstallment,
             nextServiceDate: this.state.nextservicedate,
-            custAddress: this.state.address,
+            natureOfWork: this.state.natureOfWork,
+            brandModel: this.state.brandModel,
+            amountReceived: this.state.amountReceived,
+            recommendedBy: this.state.recommendedBy
           })
           .then(() => {
             alert("Record Edited Successfully..!");
@@ -100,10 +115,13 @@ class EditRecord extends Component {
               return {
                 name: rec.custName,
                 number: rec.custPhone,
-                model: rec.plantInstalled,
-                address: rec.custAddress,
+                product: rec.product,
                 dateofinstallment: rec.dateOfInstallment,
                 nextservicedate: rec.nextServiceDate,
+                natureOfWork: rec.natureOfWork,
+                brandModel: rec.brandModel,
+                amountReceived: rec.amountReceived,
+                recommendedBy: rec.recommendedBy
               };
             },
             () => {}
@@ -128,11 +146,11 @@ class EditRecord extends Component {
         <div className="form">
           <form>
             <h2>Edit Record</h2>
-            <p htmlFor="name">Customer Name:</p>
+            <p htmlFor="name">Customer Name, Addr:</p>
             <input
               type="text"
               value={this.state.name}
-              placeholder="Customer Name"
+              placeholder="Customer Name, Addr"
               onChange={this.handleInputChange}
               name="name"
               required
@@ -146,16 +164,26 @@ class EditRecord extends Component {
               name="number"
               required
             />
-            <p htmlFor="model">Plant Installed:</p>
-            <input
-              type="text"
-              value={this.state.model}
-              placeholder="Plant Model"
+            <p htmlFor="product">Product:</p>
+            {/* <FormControl className={selectClasses.formControl}> */}
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              name="product"
+              value={this.state.product}
               onChange={this.handleInputChange}
-              name="model"
-              required
-            />
-            <p htmlFor="dateofinstallment">Date of Installment:</p>
+            >
+              <MenuItem value={'select'} disabled>Select a Product</MenuItem>
+              <MenuItem value={'Air Conditioner'}>Air Conditioner</MenuItem>
+              <MenuItem value={'RO'}>RO</MenuItem>
+              <MenuItem value={'Washing Machine'}>Washing Machine</MenuItem>
+              <MenuItem value={'Refrigerator'}>Refrigerator</MenuItem>
+              <MenuItem value={'TV'}>TV</MenuItem>
+              <MenuItem value={'Microwave Oven'}>Microwave Oven</MenuItem>
+              <MenuItem value={'Others'}>Others</MenuItem>
+            </Select>
+            {/* </FormControl> */}
+            <p htmlFor="dateofinstallment">Date:</p>
             <input
               type="date"
               value={this.state.dateofinstallment}
@@ -164,7 +192,7 @@ class EditRecord extends Component {
               name="dateofinstallment"
               required
             />
-            <p htmlFor="nextservicedate">Next Service Date:</p>
+            <p htmlFor="nextservicedate">Next Due Date:</p>
             <input
               type="date"
               value={this.state.nextservicedate}
@@ -173,13 +201,40 @@ class EditRecord extends Component {
               name="nextservicedate"
               required
             />
-            <p htmlFor="address">Customer Address:</p>
+            <p htmlFor="natureOfWork">Nature Of Work:</p>
             <input
               type="text"
-              value={this.state.address}
-              placeholder="Address"
+              value={this.state.natureOfWork}
+              placeholder="Nature Of Work"
               onChange={this.handleInputChange}
-              name="address"
+              name="natureOfWork"
+              required
+            />
+            <p htmlFor="brandModel">Brand and Model:</p>
+            <input
+              type="text"
+              value={this.state.brandModel}
+              placeholder="Brand and Model"
+              onChange={this.handleInputChange}
+              name="brandModel"
+              required
+            />
+            <p htmlFor="amountReceived">Amount Received:</p>
+            <input
+              type="text"
+              value={this.state.amountReceived}
+              placeholder="Amount Received"
+              onChange={this.handleInputChange}
+              name="amountReceived"
+              required
+            />
+            <p htmlFor="recommendedBy">Recommended By:</p>
+            <input
+              type="text"
+              value={this.state.recommendedBy}
+              placeholder="Recommended By"
+              onChange={this.handleInputChange}
+              name="recommendedBy"
               required
             />
             <div></div>

@@ -38,6 +38,7 @@ const Home = (props) => {
 
   useEffect(() => {
     getCurrentUser();
+    getNotificationCount();
   }, []);
 
   const getCurrentUser = (e) => {
@@ -114,7 +115,7 @@ const Home = (props) => {
 
   return (
     <div className="dashboardform">
-      <h2>Welcome to Naveen's DB</h2>
+      <h2>Welcome to On Time Service</h2>
       <div>
         <div>&nbsp;</div>
       </div>
@@ -177,24 +178,6 @@ const Home = (props) => {
             ></Badge>
           </Button>
         </Link>{" "}
-      </p>
-      <div>
-        <div>&nbsp;</div>
-      </div>
-      <div>
-        <div>&nbsp;</div>
-      </div>
-      <p>
-        {" "}
-        <Button
-          onClick={getNotificationCount}
-          size="large"
-          variant="contained"
-          color="primary"
-          type="button"
-        >
-          Refresh
-        </Button>
       </p>
       <div>
         <div>&nbsp;</div>
