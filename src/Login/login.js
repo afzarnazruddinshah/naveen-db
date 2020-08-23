@@ -81,7 +81,7 @@ const Login = (props) => {
   return (
     <React.Fragment>
       <div>
-        <h2 className="title">Naveen's Db</h2>
+        <h2 className="title">On Time Service</h2>
       </div>
       <h3 className="title">Login</h3>
       <div className="login-form">
