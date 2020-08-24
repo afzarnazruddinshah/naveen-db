@@ -1,12 +1,9 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
-// import * as firebase from 'firebase';
 import { firestore } from "firebase";
 import firebase from "firebase";
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
 class EditRecord extends Component {
   state = {
     name: "",
@@ -18,6 +15,7 @@ class EditRecord extends Component {
     brandModel: "",
     amountReceived: "",
     recommendedBy: "",
+    recommended: "",
   };
 
   componentDidMount() {
@@ -50,7 +48,8 @@ class EditRecord extends Component {
       natureOfWork,
       brandModel,
       amountReceived,
-      recommendedBy
+      recommendedBy,
+      recommended,
     } = this.state;
     if (
       name !== null &&
@@ -60,8 +59,9 @@ class EditRecord extends Component {
       nextservicedate !== null &&
       natureOfWork !== null &&
       brandModel !== null &&
-      amountReceived !== null &
-      recommendedBy !== null
+      amountReceived !== null &&
+      recommendedBy !== null &&
+      recommended !== null
     ) {
       return true;
     }
@@ -86,7 +86,8 @@ class EditRecord extends Component {
             natureOfWork: this.state.natureOfWork,
             brandModel: this.state.brandModel,
             amountReceived: this.state.amountReceived,
-            recommendedBy: this.state.recommendedBy
+            recommendedBy: this.state.recommendedBy,
+            recommended: this.state.recommended,
           })
           .then(() => {
             alert("Record Edited Successfully..!");
@@ -121,7 +122,8 @@ class EditRecord extends Component {
                 natureOfWork: rec.natureOfWork,
                 brandModel: rec.brandModel,
                 amountReceived: rec.amountReceived,
-                recommendedBy: rec.recommendedBy
+                recommendedBy: rec.recommendedBy,
+                recommended: rec.recommended,
               };
             },
             () => {}
@@ -173,14 +175,16 @@ class EditRecord extends Component {
               value={this.state.product}
               onChange={this.handleInputChange}
             >
-              <MenuItem value={'select'} disabled>Select a Product</MenuItem>
-              <MenuItem value={'Air Conditioner'}>Air Conditioner</MenuItem>
-              <MenuItem value={'RO'}>RO</MenuItem>
-              <MenuItem value={'Washing Machine'}>Washing Machine</MenuItem>
-              <MenuItem value={'Refrigerator'}>Refrigerator</MenuItem>
-              <MenuItem value={'TV'}>TV</MenuItem>
-              <MenuItem value={'Microwave Oven'}>Microwave Oven</MenuItem>
-              <MenuItem value={'Others'}>Others</MenuItem>
+              <MenuItem value={"select"} disabled>
+                Select a Product
+              </MenuItem>
+              <MenuItem value={"Air Conditioner"}>Air Conditioner</MenuItem>
+              <MenuItem value={"RO"}>RO</MenuItem>
+              <MenuItem value={"Washing Machine"}>Washing Machine</MenuItem>
+              <MenuItem value={"Refrigerator"}>Refrigerator</MenuItem>
+              <MenuItem value={"TV"}>TV</MenuItem>
+              <MenuItem value={"Microwave Oven"}>Microwave Oven</MenuItem>
+              <MenuItem value={"Others"}>Others</MenuItem>
             </Select>
             {/* </FormControl> */}
             <p htmlFor="dateofinstallment">Date:</p>
@@ -227,6 +231,26 @@ class EditRecord extends Component {
               name="amountReceived"
               required
             />
+            <p htmlFor="recommended">Recommender:</p>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              name="recommended"
+              value={this.state.recommended}
+              onChange={this.handleInputChange}
+            >
+              <MenuItem value={"select"} disabled>
+                Recommended By
+              </MenuItem>
+              <MenuItem value={"Relatives"}>Relatives</MenuItem>
+              <MenuItem value={"Friends"}>Friends</MenuItem>
+              <MenuItem value={"Dealers"}>Dealers</MenuItem>
+              <MenuItem value={"Neighbours"}>Neighbours</MenuItem>
+              <MenuItem value={"Customers"}>Customers</MenuItem>
+              <MenuItem value={"JustDial"}>JustDial</MenuItem>
+              <MenuItem value={"Google"}>Google</MenuItem>
+              <MenuItem value={"Others"}>Others</MenuItem>
+            </Select>
             <p htmlFor="recommendedBy">Recommended By:</p>
             <input
               type="text"

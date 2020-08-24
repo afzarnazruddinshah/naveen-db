@@ -10,11 +10,12 @@ import Badge from "@material-ui/core/Badge";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import { makeStyles } from "@material-ui/core/styles";
 import Alert from "@material-ui/lab/Alert";
-import GetAppIcon from '@material-ui/icons/GetApp';
-import * as alasql from 'alasql';
-var XLSX = require('xlsx')
+import GetAppIcon from "@material-ui/icons/GetApp";
+import AssessmentIcon from '@material-ui/icons/Assessment';
+import HomeIcon from '@material-ui/icons/Home';
+import * as alasql from "alasql";
+var XLSX = require("xlsx");
 alasql.setXLSX(XLSX);
-
 
 const useStylesAlert = makeStyles((theme) => ({
   root: {
@@ -36,7 +37,6 @@ const Home = (props) => {
   const [recordsPresent, setRecordsPresent] = useState(false);
   const audioRef = useRef(document.createElement("audio"));
   const [totalRecords, setTotalRecords] = React.useState([]);
-
 
   const badgeProps = {
     color: "secondary",
@@ -121,9 +121,11 @@ const Home = (props) => {
           recArr.push(obj);
         });
         console.log(recArr);
-        var opts = [{sheetid:'On Time Service Records',header:true}];
-        var res = alasql('SELECT * INTO XLSX("OnTimeServiceRecords.xlsx",?) FROM ?',
-                    [opts,[recArr]]);
+        var opts = [{ sheetid: "On Time Service Records", header: true }];
+        var res = alasql(
+          'SELECT * INTO XLSX("OnTimeServiceRecords.xlsx",?) FROM ?',
+          [opts, [recArr]]
+        );
       });
   };
 
@@ -141,13 +143,7 @@ const Home = (props) => {
 
   return (
     <div className="dashboardform">
-      <h2>Welcome to On Time Service</h2>
-      <div>
-        <div>&nbsp;</div>
-      </div>
-      <div>
-        <div>&nbsp;</div>
-      </div>
+      <h2>On Time Service <HomeIcon variant="filled" color="primary"/></h2>
       <div>
         <div>&nbsp;</div>
       </div>
@@ -211,12 +207,20 @@ const Home = (props) => {
       <div>
         <div>&nbsp;</div>
       </div>
-      <Button 
-        color="primary" 
-        variant="contained"
-        onClick={exportFile}>
-        Export As File&nbsp; {" "}{" "} <GetAppIcon/>
+      <Button size="large" color="primary" variant="contained" onClick={exportFile}>
+        Export As File&nbsp; <GetAppIcon />
       </Button>
+      <div>
+        <div>&nbsp;</div>
+      </div>
+      <div>
+        <div>&nbsp;</div>
+      </div>
+      <Link to="/reports">
+        <Button size="large" color="primary" variant="contained">
+          Reports &nbsp;<AssessmentIcon/>
+        </Button>
+      </Link>
       <div>
         <div>&nbsp;</div>
       </div>

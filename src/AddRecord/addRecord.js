@@ -53,6 +53,7 @@ const AddRecord = (props) => {
   const [amountReceived, setAmountReceived] = React.useState(null);
   const [recommendedBy, setRecommendedBy] = React.useState(null);
   const [billImage, setBillImage] = React.useState(null);
+  const [recommended, setRecommended] = React.useState('select');
   useEffect(() => {
     getCurrentUser();
   });
@@ -102,6 +103,9 @@ const AddRecord = (props) => {
       case "billimage":
         setBillImage(e.target.files[0]);
         break;
+      case "recommended":
+        setRecommended(e.target.value);
+        break;
       default:
         break;
     }
@@ -116,7 +120,8 @@ const AddRecord = (props) => {
       natureOfWork !== null &&
       brandModel !== null &&
       amountReceived !== null &&
-      recommendedBy !== null
+      recommendedBy !== null &&
+      recommended !== null
     ) {
       return true;
     }
@@ -125,18 +130,6 @@ const AddRecord = (props) => {
 
   //Add to database
   const addRecord = (e) => {
-    //uploading images to firebase
-    // var storage = firebase.storage();
-    // var storageRef = storage.ref();
-    // var imagesRef = storageRef.child('bill-images');
-    // imagesRef.put(billImage).then(function(snapshot) {
-    //   console.log('Uploaded a blob or file!');
-    // });
-    // var data1 = [{a:1,b:10},{a:2,b:20}];
-    // var data2 = [{a:100,b:10},{a:200,b:20}];
-    // var opts = [{sheetid:'One',header:true},{sheetid:'Two',header:false}];
-    // var res = alasql('SELECT * INTO XLSX("restest344b.xlsx",?) FROM ?',
-    //                  [opts,[data1,data2]]);
     e.preventDefault();
     if (validateInput()) {
       if (window.confirm("Are you sure you want to add this Record?")) {
@@ -151,7 +144,8 @@ const AddRecord = (props) => {
             natureOfWork: natureOfWork,
             brandModel: brandModel,
             amountReceived:amountReceived,
-            recommendedBy:recommendedBy
+            recommendedBy:recommendedBy,
+            recommended:recommended
           })
           .then(() => {
             alert("Record Added Successfully..!");
@@ -272,11 +266,33 @@ const AddRecord = (props) => {
         <div>
           <div></div>&nbsp;
         </div>
+        <FormControl className={selectClasses.formControl}>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          name="recommended"
+          value={recommended}
+          onChange={handleInputChange}
+        >
+          <MenuItem value={'select'} disabled>Recommended By</MenuItem>
+          <MenuItem value={'Relatives'}>Relatives</MenuItem>
+          <MenuItem value={'Friends'}>Friends</MenuItem>
+          <MenuItem value={'Dealers'}>Dealers</MenuItem>
+          <MenuItem value={'Neighbours'}>Neighbours</MenuItem>
+          <MenuItem value={'Customers'}>Customers</MenuItem>
+          <MenuItem value={'JustDial'}>JustDial</MenuItem>
+          <MenuItem value={'Google'}>Google</MenuItem>
+          <MenuItem value={'Others'}>Others</MenuItem>
+        </Select>
+        </FormControl>
+        <div>
+          <div></div>&nbsp;
+        </div>
         <TextField
           name="recommendedby"
           type="text"
           onChange={handleInputChange}
-          label="Recommended By"
+          label="Recommender Name"
           required={true}
         />
         {/* <Input 

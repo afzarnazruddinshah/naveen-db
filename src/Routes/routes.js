@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
+import {HashRouter, BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
 import AddRecord from "../AddRecord/addRecord";
 import ViewRecords from "../ViewRecords/viewRecords";
 import Home from "../Home/home";
@@ -10,9 +10,10 @@ import EditRecord from "../EditRecord/editRecord";
 import Login from "../Login/login";
 import SignUp from "../SignIn/signin";
 import PasswordReset from '../PasswordReset/passwordreset';
+import ReportChart from "../ReportChart/ReportChart";
 const Routes = () => {
   return (
-    <BrowserRouter>
+    <HashRouter basename="/">
       <Switch>
         <Route
           exact
@@ -28,6 +29,7 @@ const Routes = () => {
         <Route exact path="/viewrecords" render={() => <ViewRecords />} />
         <Route exact path="/editrecord/:id" render={() => <EditRecord />} />
         <Route exact path="/resetpwd" render={() => <PasswordReset />} />
+        <Route exact path="/reports" render={() => <ReportChart />} />
         <Route
           render={() => (
             <Fragment>
@@ -38,7 +40,7 @@ const Routes = () => {
           )}
         />
       </Switch>
-    </BrowserRouter>
+    </HashRouter>
   );
 };
 
