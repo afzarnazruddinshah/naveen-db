@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/naveen-db/static/css/main.73c33720.chunk.css",
-    "main.js": "/naveen-db/static/js/main.320953da.chunk.js",
-    "main.js.map": "/naveen-db/static/js/main.320953da.chunk.js.map",
+    "main.css": "/naveen-db/static/css/main.09bb9fd3.chunk.css",
+    "main.js": "/naveen-db/static/js/main.f846d1cf.chunk.js",
+    "main.js.map": "/naveen-db/static/js/main.f846d1cf.chunk.js.map",
     "runtime-main.js": "/naveen-db/static/js/runtime-main.4dc3f7f0.js",
     "runtime-main.js.map": "/naveen-db/static/js/runtime-main.4dc3f7f0.js.map",
-    "static/js/2.62761489.chunk.js": "/naveen-db/static/js/2.62761489.chunk.js",
-    "static/js/2.62761489.chunk.js.map": "/naveen-db/static/js/2.62761489.chunk.js.map",
+    "static/js/2.eaee0790.chunk.js": "/naveen-db/static/js/2.eaee0790.chunk.js",
+    "static/js/2.eaee0790.chunk.js.map": "/naveen-db/static/js/2.eaee0790.chunk.js.map",
     "index.html": "/naveen-db/index.html",
-    "precache-manifest.730124341418cd68ba9c91e28762627e.js": "/naveen-db/precache-manifest.730124341418cd68ba9c91e28762627e.js",
+    "precache-manifest.7e45991d717c8adc5ba7ed1ad032ea6e.js": "/naveen-db/precache-manifest.7e45991d717c8adc5ba7ed1ad032ea6e.js",
     "service-worker.js": "/naveen-db/service-worker.js",
-    "static/css/main.73c33720.chunk.css.map": "/naveen-db/static/css/main.73c33720.chunk.css.map",
-    "static/js/2.62761489.chunk.js.LICENSE.txt": "/naveen-db/static/js/2.62761489.chunk.js.LICENSE.txt"
+    "static/css/main.09bb9fd3.chunk.css.map": "/naveen-db/static/css/main.09bb9fd3.chunk.css.map",
+    "static/js/2.eaee0790.chunk.js.LICENSE.txt": "/naveen-db/static/js/2.eaee0790.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.4dc3f7f0.js",
-    "static/js/2.62761489.chunk.js",
-    "static/css/main.73c33720.chunk.css",
-    "static/js/main.320953da.chunk.js"
+    "static/js/2.eaee0790.chunk.js",
+    "static/css/main.09bb9fd3.chunk.css",
+    "static/js/main.f846d1cf.chunk.js"
   ]
 }
