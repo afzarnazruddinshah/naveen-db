@@ -72,6 +72,20 @@ const ViewRecords = (props) => {
     });
   };
 
+  const compare = (a, b) => {
+    // Use toUpperCase() to ignore character casing
+    const bandA = a.dateOfInstallment;
+    const bandB = b.dateOfInstallment;
+  
+    let comparison = 0;
+    if (bandA > bandB) {
+      comparison = -1;
+    } else if (bandA < bandB) {
+      comparison = 1;
+    }
+    return comparison;
+  }
+
   //Get all records of installations
   const getData = () => {
     var db = firestore();
@@ -84,6 +98,7 @@ const ViewRecords = (props) => {
           const obj = { ...idObj, ...doc.data() };
           recArr.push(obj);
         });
+        recArr.sort(compare);
         setRecords(recArr);
         setRecordsPresent(true);
       });

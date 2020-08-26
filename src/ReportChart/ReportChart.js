@@ -3,7 +3,9 @@ import Chart from "react-google-charts";
 import firebase from "firebase";
 import { firestore } from "firebase";
 import { Link } from "react-router-dom";
-
+import HomeIcon from "@material-ui/icons/Home";
+import Button from "@material-ui/core/Button";
+import './reportChart.css';
 const ReportChart = () => {
   const [dataPresent, setDataPresent] = React.useState(false);
   const [records, setRecords] = React.useState({
@@ -63,9 +65,13 @@ const ReportChart = () => {
   const data = JSON.parse(localStorage.getItem("reports_data"));
   return (
     <Fragment>
+      <div className="login-form">
       <p>
         <Link to="/dashboard">
-          <button id="home">{"< Go To Dashboard"}</button>
+          <Button color="secondary" variant="contained">
+            <HomeIcon />
+            &nbsp;{" Go To Dashboard"}
+          </Button>
         </Link>
       </p>
       <div className="form">
@@ -91,6 +97,7 @@ const ReportChart = () => {
           height={"400px"}
           legend_toggle
         />
+      </div>
       </div>
     </Fragment>
   );

@@ -73,7 +73,6 @@ const Notification = (props) => {
   useEffect(() => {
     getCurrentUser(); //to verify authentication
     getData(); //Get notificationd data from db
-    console.log('useEffect notifications');
   }, []);
   
   const getCurrentUser = (e) => {
