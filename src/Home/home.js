@@ -4,15 +4,15 @@ import { firestore } from "firebase";
 import { getToday } from "../Utils/utilityFunctions";
 import "./home.css";
 import firebase from "firebase";
+//Material UI
 import Button from "@material-ui/core/Button";
-//Notification Badge
 import Badge from "@material-ui/core/Badge";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import { makeStyles } from "@material-ui/core/styles";
-import Alert from "@material-ui/lab/Alert";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import AssessmentIcon from '@material-ui/icons/Assessment';
 import HomeIcon from '@material-ui/icons/Home';
+//For Excel Generation
 import * as alasql from "alasql";
 var XLSX = require("xlsx");
 alasql.setXLSX(XLSX);
@@ -31,13 +31,12 @@ const useStylesAlert = makeStyles((theme) => ({
 }));
 
 const Home = (props) => {
-  const alertClasses = useStylesAlert();
   const [count, setCount] = useState(0);
   const [records, setRecords] = useState([]);
   const [recordsPresent, setRecordsPresent] = useState(false);
   const audioRef = useRef(document.createElement("audio"));
   const [totalRecords, setTotalRecords] = React.useState([]);
-
+  const [allRecords, setAllRecords] = React.useState();
   const badgeProps = {
     color: "secondary",
     children: <NotificationsIcon />,
@@ -46,6 +45,7 @@ const Home = (props) => {
   useEffect(() => {
     getCurrentUser();
     getNotificationCount();
+    getAllData();
   }, []);
 
   const getCurrentUser = (e) => {
@@ -55,6 +55,39 @@ const Home = (props) => {
       }
     });
   };
+  
+  const getAllData = () => {
+    var db = firestore();
+    var recArr = [];
+    db.collection("installations")
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          const idObj = { id: doc.id };
+          const obj = { ...idObj, ...doc.data() };
+          recArr.push(obj);
+        });
+        const recommenders = recArr.reduce((recommenders, item) => {
+          const group = (recommenders[item.recommended] || []);
+          group.push(item);
+          recommenders[item.recommended] = group;
+          return recommenders;
+        }, {});
+
+        const dataObject = {
+          customers: recommenders.Customers!== undefined?recommenders.Customers.length: 0,
+          relatives: recommenders.Relatives!== undefined?recommenders.Relatives.length: 0,
+          friends: recommenders.Friends!== undefined?recommenders.Friends.length: 0,
+          dealers: recommenders.Dealers !== undefined? recommenders.Dealers.length: 0,
+          neighbours: recommenders.Neighbours !== undefined? recommenders.Neighbours.length: 0,
+          justDial: recommenders.JustDial!== undefined?recommenders.JustDial.length: 0,
+          google: recommenders.Google!== undefined?recommenders.Google.length: 0,
+          others: recommenders.Others!== undefined?recommenders.Others.length: 0
+        }
+        setAllRecords(recArr);
+        localStorage.setItem('reports_data', JSON.stringify(dataObject));
+      });
+  }
 
   //For Getting the notification Count on Refresh button click
   const getNotificationCount = () => {
@@ -71,8 +104,6 @@ const Home = (props) => {
           const obj = { ...idObj, ...doc.data() };
           recArr.push(obj);
         });
-        setRecords(recArr);
-        setRecordsPresent(true);
         setCount(recArr.length);
       })
       .catch((err) => {
@@ -91,8 +122,6 @@ const Home = (props) => {
             recArr.push(obj);
           }
         });
-        setRecords(recArr);
-        setRecordsPresent(true);
         setCount(recArr.length);
         playNotificationSound(recArr.length);
       })
@@ -109,24 +138,14 @@ const Home = (props) => {
   };
 
   const exportFile = () => {
-    var db = firestore();
-    var recArr = [];
+
     //extract data
-    db.collection("installations")
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          const idObj = { id: doc.id };
-          const obj = { ...idObj, ...doc.data() };
-          recArr.push(obj);
-        });
-        console.log(recArr);
-        var opts = [{ sheetid: "On Time Service Records", header: true }];
+    var opts = [{ sheetid: "On Time Service Records", header: true }];
         var res = alasql(
           'SELECT * INTO XLSX("OnTimeServiceRecords.xlsx",?) FROM ?',
-          [opts, [recArr]]
+          [opts, [allRecords]]
         );
-      });
+    
   };
 
   const logoutUser = (e) => {
