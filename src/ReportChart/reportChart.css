@@ -6,3 +6,10 @@
     align-content: center;
 
 }
+
+div#PieChart{
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+}

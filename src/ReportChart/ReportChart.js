@@ -27,7 +27,7 @@ const ReportChart = () => {
 
   const pieOptions = {
     title: "Recommendations Chart",
-    pieHole: 0,
+    pieHole: 0.5,
     slices: [
       {
         color: "#2BB673",
@@ -79,8 +79,8 @@ const ReportChart = () => {
           chartType="PieChart"
           data={[
             [
-              "Relatives",
-              "Friends"
+              "Sales",
+              "Recommenders"
             ],
             ["Relatives", data.relatives],
             ["Friends", data.friends],
