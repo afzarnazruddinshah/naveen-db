@@ -38,3 +38,10 @@ p{
 {
     font-size: 12pt;
 }
+
+.logo{
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}

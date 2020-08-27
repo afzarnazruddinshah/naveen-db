@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 // import * as firebase from "firebase";
 import { firestore } from "firebase";
 import { Link, withRouter } from "react-router-dom";

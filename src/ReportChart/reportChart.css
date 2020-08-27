@@ -13,3 +13,7 @@ div#PieChart{
     justify-content: center;
     align-content: center;
 }
+
+rect{
+    fill: #8ECDCC;
+}

@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import {HashRouter, BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
+import {HashRouter, Route, Redirect, Switch } from "react-router-dom";
 import AddRecord from "../AddRecord/addRecord";
 import ViewRecords from "../ViewRecords/viewRecords";
 import Home from "../Home/home";

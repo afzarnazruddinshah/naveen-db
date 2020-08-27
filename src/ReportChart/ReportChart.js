@@ -1,32 +1,14 @@
 import React, { Fragment } from "react";
 import Chart from "react-google-charts";
-import firebase from "firebase";
-import { firestore } from "firebase";
 import { Link } from "react-router-dom";
 import HomeIcon from "@material-ui/icons/Home";
 import Button from "@material-ui/core/Button";
-import './reportChart.css';
+import Grid from "@material-ui/core/Grid";
+
+import "./reportChart.css";
 const ReportChart = () => {
-  const [dataPresent, setDataPresent] = React.useState(false);
-  const [records, setRecords] = React.useState({
-    relatives: 0,
-    friends: 0,
-    dealers: 0,
-    neighbours: 0,
-    customers: 0,
-    justDial: 0,
-    google: 0,
-    others: 0,
-  });
-
-  React.useEffect(() => {
-    getChartsData();
-  }, []);
-
-  const getChartsData = () => {};
 
   const pieOptions = {
-    title: "Recommendations Chart",
     pieHole: 0.5,
     slices: [
       {
@@ -54,10 +36,10 @@ const ReportChart = () => {
       showColorCode: true,
     },
     chartArea: {
-      left: 30,
-      top: 30,
+      // left: 30,
+      top: 0,
       width: "50%",
-      height: "30%",
+      height: "50%",
     },
     fontName: "Roboto",
   };
@@ -65,40 +47,49 @@ const ReportChart = () => {
   const data = JSON.parse(localStorage.getItem("reports_data"));
   return (
     <Fragment>
-      <div className="login-form">
-      <p>
-        <Link to="/dashboard">
-          <Button color="secondary" variant="contained">
-            <HomeIcon />
-            &nbsp;{" Go To Dashboard"}
-          </Button>
-        </Link>
-      </p>
-      <div className="form">
+      <Grid
+        container
+        justify="center"
+        alignContent="center"
+        alignItems="center"
+      >
+        <div>&nbsp;</div>
+        <div>&nbsp;</div>
+       
+        <p>
+          <Link to="/dashboard">
+            <Button color="secondary" variant="contained">
+              <HomeIcon />
+              &nbsp;{" Go To Dashboard"}
+            </Button>
+          </Link>
+        </p>
+        <h3>Recommenders Chart</h3>
         <Chart
-          chartType="PieChart"
-          data={[
-            [
-              "Sales",
-              "Recommenders"
-            ],
-            ["Relatives", data.relatives],
-            ["Friends", data.friends],
-            ["Dealers", data.dealers],
-            ["Neighbours", data.neighbours],
-            ["Customers", data.customers],
-            ["JustDial", data.justDial],
-            ["Google", data.google],
-            ["Others", data.others],
-          ]}
-          options={pieOptions}
-          graph_id="PieChart"
-          width={"100%"}
-          height={"400px"}
-          legend_toggle
-        />
-      </div>
-      </div>
+            chartType="PieChart"
+            data={[
+              ["Sales", "Recommenders"],
+              ["Relatives", data.relatives],
+              ["Friends", data.friends],
+              ["Dealers", data.dealers],
+              ["Neighbours", data.neighbours],
+              ["Customers", data.customers],
+              ["JustDial", data.justDial],
+              ["Google", data.google],
+              ["Others", data.others],
+            ]}
+            options={pieOptions}
+            graph_id="PieChart"
+            width={"100%"}
+            height={"400px"}
+            legend_toggle
+          />
+      </Grid>
+      {/* <div className="login-form">
+        <div className="form">
+          
+        </div>
+      </div> */}
     </Fragment>
   );
 };

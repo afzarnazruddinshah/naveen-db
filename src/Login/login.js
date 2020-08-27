@@ -1,5 +1,5 @@
-import React, { Component, useState } from "react";
-import { Link, withRouter } from "react-router-dom";
+import React, { useState } from "react";
+import { withRouter } from "react-router-dom";
 import firebase from "firebase";
 import Button from "@material-ui/core/Button";
 import "./login.css";
@@ -7,7 +7,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Backdrop from "@material-ui/core/Backdrop";
 import CircularProgress from "@material-ui/core/CircularProgress";
-
+// import logo from '../../public/logo.png';
 const useStylesBackDrop = makeStyles((theme) => ({
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
@@ -57,7 +57,7 @@ const Login = (props) => {
       .catch((err) => {
         setOpenBackDrop(false);
         if (err.code === "auth/wrong-password") {
-          setAuthMessage("The email or Password is incorrect !");
+          setAuthMessage("Email or Password is incorrect");
         }
       });
   };
@@ -80,20 +80,46 @@ const Login = (props) => {
   };
   return (
     <React.Fragment>
-      <div>
-        <h2 className="title">On Time Service</h2>
+      <div className="App">
+        <div>&nbsp;</div>
+        <div>&nbsp;</div>
+        <div className="logo">
+          <img
+            src={process.env.PUBLIC_URL + "/logo-3.png"}
+            width="360"
+            height="96.33"
+            alt="logo-here"
+          />
+        </div>
       </div>
-      <h3 className="title">Login</h3>
+
+      {/* <h3 className="logo">Login</h3> */}
       <div className="login-form">
+        <div>&nbsp;</div>
+        <div>&nbsp;</div>
+        <Button
+          style={{ color: "black", backgroundColor: "white" }}
+          size="large"
+          variant="contained"
+        >
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Login&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;
+        </Button>
+        <div>&nbsp;</div>
+        <div>&nbsp;</div>
         <form className={classes.textfield}>
-          <small className="err">{authMessage}</small>
+          <small></small>
           <TextField
+            variant="outlined"
             type="email"
             onChange={handleInputChange}
             required={true}
+            error={authMessage === "" ? false: true}
             name="email"
             id="standard-basic"
             label="Email Address"
+            helperText={authMessage}
           />
           <div>
             <div></div>&nbsp;
@@ -101,6 +127,7 @@ const Login = (props) => {
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <TextField
             type="password"
+            variant="outlined"
             onChange={handleInputChange}
             required={true}
             name="pwd"
@@ -121,18 +148,16 @@ const Login = (props) => {
           >
             Login Now
           </Button>
-          <div>
-            <div></div>&nbsp;
-          </div>
-          <div>
-            <div></div>&nbsp;
-          </div>
-          <p className="red stmt login-form">
-            Forgot Password?{" "}
-            <span onClick={resetPassword}>
-              <u>Click Here</u>
-            </span>
-          </p>
+          <Button
+          style={{backgroundColor: "red", color: "white"}}
+            size="large"
+            variant="contained"
+            type="submit"
+            name="submit"
+            onClick={resetPassword}
+          >
+            Forgot Password?
+          </Button>
         </form>
       </div>
       <Backdrop

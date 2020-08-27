@@ -1,4 +1,4 @@
-import React, { Component, Fragment, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 // import * as firebase from 'firebase';
 import { firestore } from "firebase";
 import "./viewRecords.css";

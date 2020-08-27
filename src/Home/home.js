@@ -17,25 +17,13 @@ import * as alasql from "alasql";
 var XLSX = require("xlsx");
 alasql.setXLSX(XLSX);
 
-const useStylesAlert = makeStyles((theme) => ({
-  root: {
-    width: "100%",
-    "& > * + *": {
-      marginTop: theme.spacing(2),
-      alignContent: "center",
-      textAlign: "center",
-      justifyContent: "center",
-      alignItems: "center",
-    },
-  },
-}));
 
 const Home = (props) => {
   const [count, setCount] = useState(0);
-  const [records, setRecords] = useState([]);
-  const [recordsPresent, setRecordsPresent] = useState(false);
+  // const [records, setRecords] = useState([]);
+  // const [recordsPresent, setRecordsPresent] = useState(false);
   const audioRef = useRef(document.createElement("audio"));
-  const [totalRecords, setTotalRecords] = React.useState([]);
+  // const [totalRecords, setTotalRecords] = React.useState([]);
   const [allRecords, setAllRecords] = React.useState();
   const badgeProps = {
     color: "secondary",
@@ -145,7 +133,6 @@ const Home = (props) => {
           'SELECT * INTO XLSX("OnTimeServiceRecords.xlsx",?) FROM ?',
           [opts, [allRecords]]
         );
-    
   };
 
   const logoutUser = (e) => {

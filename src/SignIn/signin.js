@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-// import * as firebase from 'firebase/auth';
 import firebase from "firebase";
 import { withRouter, Link } from "react-router-dom";
 import "./signin.css";

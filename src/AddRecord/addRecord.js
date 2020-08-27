@@ -1,8 +1,8 @@
-import React, { Component, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 // import firebase from 'firebase/app';
 // import * as firebase from 'firebase';
 import { firestore } from "firebase";
-import { Link, Redirect, withRouter } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import firebase from "firebase";
 import "./addrecords.css";
 import Button from "@material-ui/core/Button";
@@ -11,10 +11,8 @@ import SaveIcon from "@material-ui/icons/Save";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-import Input from '@material-ui/core/Input';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -29,22 +27,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const selectStyles = makeStyles((theme) => ({
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
-  },
-}));
 // class AddRecord extends Component
 const AddRecord = (props) => {
   const classes = useStyles();
   const selectClasses = useStyles();
   const [name, setName] = useState(null);
   const [number, setNumber] = useState(null);
-  const [model, setModel] = useState(null);
   const [dateofinstallment, setDateOfInstallment] = useState(null);
   const [nextservicedate, setNextServiceDate] = useState(null);
   const [natureOfWork, setNatureOfWork] = useState(null);
@@ -52,7 +40,6 @@ const AddRecord = (props) => {
   const [brandModel, setBrandModel] = React.useState(null);
   const [amountReceived, setAmountReceived] = React.useState(null);
   const [recommendedBy, setRecommendedBy] = React.useState(null);
-  const [billImage, setBillImage] = React.useState(null);
   const [recommended, setRecommended] = React.useState('select');
   useEffect(() => {
     getCurrentUser();
@@ -76,9 +63,6 @@ const AddRecord = (props) => {
       case "number":
         setNumber(e.target.value);
         break;
-      case "model":
-        setModel(e.target.value);
-        break;
       case "dateofinstallment":
         setDateOfInstallment(e.target.value);
         break;
@@ -99,9 +83,6 @@ const AddRecord = (props) => {
         break;
       case "recommendedby":
         setRecommendedBy(e.target.value);
-        break; 
-      case "billimage":
-        setBillImage(e.target.files[0]);
         break;
       case "recommended":
         setRecommended(e.target.value);
