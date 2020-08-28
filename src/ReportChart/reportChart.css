@@ -12,8 +12,20 @@ div#PieChart{
     align-items: center;
     justify-content: center;
     align-content: center;
+    top: 30px;
 }
 
 rect{
     fill: #8ECDCC;
+}
+
+.dashboardform
+{
+    align-content: center;
+    align-self: center;
+    text-align: center;
+}
+
+.dashboardform .link{
+    padding: 8px 25px;
 }

@@ -7,7 +7,6 @@ import Grid from "@material-ui/core/Grid";
 
 import "./reportChart.css";
 const ReportChart = () => {
-
   const pieOptions = {
     pieHole: 0.5,
     slices: [
@@ -37,7 +36,7 @@ const ReportChart = () => {
     },
     chartArea: {
       // left: 30,
-      top: 0,
+      top: 30,
       width: "50%",
       height: "50%",
     },
@@ -53,19 +52,22 @@ const ReportChart = () => {
         alignContent="center"
         alignItems="center"
       >
-        <div>&nbsp;</div>
-        <div>&nbsp;</div>
-       
         <p>
-          <Link to="/dashboard">
-            <Button color="secondary" variant="contained">
-              <HomeIcon />
-              &nbsp;{" Go To Dashboard"}
-            </Button>
-          </Link>
+          <Grid item justify="center" alignContent="center" alignItems="center">
+            <Link to="/dashboard">
+              <Button color="secondary" variant="contained">
+                <HomeIcon />
+                &nbsp;{" Go To Dashboard"}
+              </Button>
+
+            </Link>
+          </Grid>
         </p>
-        <h3>Recommenders Chart</h3>
-        <Chart
+        <div>
+          <p>&nbsp;</p>
+        </div>
+        <Grid item>
+          <Chart
             chartType="PieChart"
             data={[
               ["Sales", "Recommenders"],
@@ -84,12 +86,8 @@ const ReportChart = () => {
             height={"400px"}
             legend_toggle
           />
+        </Grid>
       </Grid>
-      {/* <div className="login-form">
-        <div className="form">
-          
-        </div>
-      </div> */}
     </Fragment>
   );
 };
