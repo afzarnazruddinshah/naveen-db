@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/naveen-db/precache-manifest.993b49c762627ca3cca63b7222205fba.js"
+  "/naveen-db/precache-manifest.30567cf1e4be756f44ec15b865ed9a0a.js"
 );
 
 self.addEventListener('message', (event) => {

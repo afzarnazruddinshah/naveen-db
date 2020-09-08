@@ -1,6 +1,7 @@
 {
   "short_name": "OnTime Service",
   "name": "OnTime Service",
+  "description": "Digital Record Managing Tool",
   "icons": [
     {
       "src": "favicon.ico",
