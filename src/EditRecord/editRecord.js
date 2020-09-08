@@ -56,7 +56,6 @@ class EditRecord extends Component {
       number !== null &&
       product !== null &&
       dateofinstallment !== null &&
-      nextservicedate !== null &&
       natureOfWork !== null &&
       brandModel !== null &&
       amountReceived !== null &&
