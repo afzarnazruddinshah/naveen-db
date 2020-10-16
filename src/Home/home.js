@@ -139,6 +139,7 @@ const Home = (props) => {
       .auth()
       .signOut()
       .then(() => {
+        localStorage.removeItem("uid");
         props.history.push("/login"); //Move to Login Route on Logout
       })
       .catch(function (error) {
