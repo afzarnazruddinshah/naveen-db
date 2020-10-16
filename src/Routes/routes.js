@@ -11,6 +11,7 @@ import Login from "../Login/login";
 import SignUp from "../SignIn/signin";
 import PasswordReset from '../PasswordReset/passwordreset';
 import ReportChart from "../ReportChart/ReportChart";
+import GenerateBill from "../CreateBill/generateBill";
 const Routes = () => {
   return (
     <HashRouter basename="/">
@@ -30,6 +31,7 @@ const Routes = () => {
         <Route exact path="/editrecord/:id" render={() => <EditRecord />} />
         <Route exact path="/resetpwd" render={() => <PasswordReset />} />
         <Route exact path="/reports" render={() => <ReportChart />} />
+        <Route exact path="/generate-bill" render={() => <GenerateBill />} />
         <Route
           render={() => (
             <Fragment>

@@ -16,6 +16,7 @@ class EditRecord extends Component {
     amountReceived: "",
     recommendedBy: "",
     recommended: "",
+    userId: ""
   };
 
   componentDidMount() {
@@ -25,6 +26,7 @@ class EditRecord extends Component {
 
   getCurrentUser = (e) => {
     firebase.auth().onAuthStateChanged((user) => {
+      this.setState(()=> { return { userId: user.uid}});
       if (user === null || user === undefined) {
         this.props.history.push("/login");
       }
@@ -44,7 +46,6 @@ class EditRecord extends Component {
       number,
       product,
       dateofinstallment,
-      nextservicedate,
       natureOfWork,
       brandModel,
       amountReceived,
@@ -87,6 +88,7 @@ class EditRecord extends Component {
             amountReceived: this.state.amountReceived,
             recommendedBy: this.state.recommendedBy,
             recommended: this.state.recommended,
+            uid: this.state.userId
           })
           .then(() => {
             alert("Record Edited Successfully..!");

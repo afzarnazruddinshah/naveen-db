@@ -58,14 +58,15 @@ const ViewRecords = (props) => {
   const [searchBox, setSearchBox] = useState("");
   const [searchOn, setSearchOn] = useState(false);
   const [searchRecords, setSearchRecords]= useState([]);
-
+  const [userId, setUserId] = React.useState('');
   useEffect( ()=> {
     getCurrentUser();
     getData();
-  }, [])
+  }, []);
 
   const getCurrentUser = () => {
     firebase.auth().onAuthStateChanged((user) => {
+      localStorage.setItem('uid', user.uid);
       if (user === null || user === undefined) {
         props.history.push("/login");
       }
@@ -91,6 +92,7 @@ const ViewRecords = (props) => {
     var db = firestore();
     var recArr = [];
     db.collection("installations")
+    .where("uid", "==", localStorage.getItem("uid"))
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {

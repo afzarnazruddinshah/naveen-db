@@ -41,12 +41,14 @@ const AddRecord = (props) => {
   const [amountReceived, setAmountReceived] = React.useState(null);
   const [recommendedBy, setRecommendedBy] = React.useState(null);
   const [recommended, setRecommended] = React.useState('select');
+  const [userId, setUserId] = React.useState('');
   useEffect(() => {
     getCurrentUser();
   });
 
   const getCurrentUser = (e) => {
     firebase.auth().onAuthStateChanged((user) => {
+      setUserId(user.uid);
       if (user === null || user === undefined) {
         props.history.push("/login");
       }
@@ -126,7 +128,8 @@ const AddRecord = (props) => {
             brandModel: brandModel,
             amountReceived:amountReceived,
             recommendedBy:recommendedBy,
-            recommended:recommended
+            recommended:recommended,
+            uid: userId
           })
           .then(() => {
             alert("Record Added Successfully..!");
