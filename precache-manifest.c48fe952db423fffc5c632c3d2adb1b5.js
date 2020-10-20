@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "868320e903fea3bc75e84481c7f9237d",
+    "revision": "fff8e49cfbda9e26ef11caccb297b8ca",
     "url": "/naveen-db/index.html"
   },
   {
-    "revision": "86b42fedceecf0d6fd85",
+    "revision": "103a4fae040c94cc814e",
     "url": "/naveen-db/static/css/main.a982e933.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/naveen-db/static/js/2.ddebaaee.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "86b42fedceecf0d6fd85",
-    "url": "/naveen-db/static/js/main.18047cef.chunk.js"
+    "revision": "103a4fae040c94cc814e",
+    "url": "/naveen-db/static/js/main.3a2d76e2.chunk.js"
   },
   {
     "revision": "668777b1d39967242381",
