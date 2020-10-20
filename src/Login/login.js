@@ -25,12 +25,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Login = (props) => {
+
   const classes = useStyles();
   const classesBackDrop = useStylesBackDrop();
   const [openBackDrop, setOpenBackDrop] = useState(false);
   const [authMessage, setAuthMessage] = useState("");
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
+
+  React.useEffect(()=> {
+    localStorage.clear();
+  }, []);
 
   const handleInputChange = (e) => {
     e.persist();

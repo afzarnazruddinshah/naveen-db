@@ -37,6 +37,7 @@ const Home = (props) => {
 
   const getCurrentUser = (e) => {
     firebase.auth().onAuthStateChanged((user) => {
+      localStorage.setItem('uid', user.uid);
       if (user === null || user === undefined) {
         props.history.push("/login");
       }
@@ -47,6 +48,7 @@ const Home = (props) => {
     var db = firestore();
     var recArr = [];
     db.collection("installations")
+    .where("uid", "==", localStorage.getItem("uid"))
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
