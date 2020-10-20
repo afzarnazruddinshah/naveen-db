@@ -35,6 +35,8 @@ const Login = (props) => {
 
   React.useEffect(()=> {
     localStorage.clear();
+    localStorage.removeItem('reports_data');
+    localStorage.removeItem('uid');
   }, []);
 
   const handleInputChange = (e) => {
