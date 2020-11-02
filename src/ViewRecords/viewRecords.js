@@ -21,6 +21,8 @@ import RefreshIcon from '@material-ui/icons/Refresh';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import TextField from '@material-ui/core/TextField';
+
+import { getDateObjectFromString } from '../Utils/utilityFunctions';
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
@@ -58,7 +60,6 @@ const ViewRecords = (props) => {
   const [searchBox, setSearchBox] = useState("");
   const [searchOn, setSearchOn] = useState(false);
   const [searchRecords, setSearchRecords]= useState([]);
-  const [userId, setUserId] = React.useState('');
   useEffect( ()=> {
     getCurrentUser();
     getData();
@@ -196,8 +197,8 @@ const ViewRecords = (props) => {
         <StyledTableCell component="th" scope="row">{ item.custName}</StyledTableCell>
         <StyledTableCell align="right">{item.custPhone}</StyledTableCell>
         <StyledTableCell align="right">{item.product}</StyledTableCell>
-        <StyledTableCell align="right">{item.dateOfInstallment}</StyledTableCell>
-        <StyledTableCell align="right">{item.nextServiceDate}</StyledTableCell>
+        <StyledTableCell align="right">{getDateObjectFromString(item.dateOfInstallment)}</StyledTableCell>
+        <StyledTableCell align="right">{getDateObjectFromString(item.nextServiceDate)}</StyledTableCell>
         <StyledTableCell align="right">{item.natureOfWork}</StyledTableCell>
         <StyledTableCell align="right">{item.brandModel}</StyledTableCell>
         <StyledTableCell align="right">{item.amountReceived}</StyledTableCell>

@@ -4,6 +4,7 @@ import { firestore } from "firebase";
 import firebase from "firebase";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
+import { getDateObjectFromString } from "../Utils/utilityFunctions";
 class EditRecord extends Component {
   state = {
     name: "",
@@ -16,7 +17,7 @@ class EditRecord extends Component {
     amountReceived: "",
     recommendedBy: "",
     recommended: "",
-    userId: ""
+    userId: "",
   };
 
   componentDidMount() {
@@ -26,7 +27,9 @@ class EditRecord extends Component {
 
   getCurrentUser = (e) => {
     firebase.auth().onAuthStateChanged((user) => {
-      this.setState(()=> { return { userId: user.uid}});
+      this.setState(() => {
+        return { userId: user.uid };
+      });
       if (user === null || user === undefined) {
         this.props.history.push("/login");
       }
@@ -88,7 +91,7 @@ class EditRecord extends Component {
             amountReceived: this.state.amountReceived,
             recommendedBy: this.state.recommendedBy,
             recommended: this.state.recommended,
-            uid: this.state.userId
+            uid: this.state.userId,
           })
           .then(() => {
             alert("Record Edited Successfully..!");
