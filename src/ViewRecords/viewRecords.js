@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 // import * as firebase from 'firebase';
-import { firestore } from "firebase";
+
 import "./viewRecords.css";
 import { Link, withRouter } from "react-router-dom";
 import firebase from "firebase";
+import { firestore } from "firebase";
 //Table 
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -197,6 +198,7 @@ const ViewRecords = (props) => {
         <StyledTableCell component="th" scope="row">{ item.custName}</StyledTableCell>
         <StyledTableCell align="right">{item.custPhone}</StyledTableCell>
         <StyledTableCell align="right">{item.product}</StyledTableCell>
+        <StyledTableCell align="right">{(item.refrigerant!== 'select' && item.refrigerant !== undefined) ? item.refrigerant : 'No Data'}</StyledTableCell>
         <StyledTableCell align="right">{getDateObjectFromString(item.dateOfInstallment)}</StyledTableCell>
         <StyledTableCell align="right">{getDateObjectFromString(item.nextServiceDate)}</StyledTableCell>
         <StyledTableCell align="right">{item.natureOfWork}</StyledTableCell>
@@ -237,6 +239,7 @@ const ViewRecords = (props) => {
                 <StyledTableCell align="right">Name and Address</StyledTableCell>
                 <StyledTableCell align="right">Phone</StyledTableCell>
                 <StyledTableCell align="right">Product</StyledTableCell>
+                <StyledTableCell align="right">Refrigerant</StyledTableCell>
                 <StyledTableCell align="right">Date </StyledTableCell>
                 <StyledTableCell align="right">Next Due Date</StyledTableCell>
                 <StyledTableCell align="right">Nature Of Work</StyledTableCell>

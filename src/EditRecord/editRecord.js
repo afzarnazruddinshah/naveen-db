@@ -10,6 +10,7 @@ class EditRecord extends Component {
     name: "",
     number: "",
     product: "",
+    refrigerant: "",
     dateofinstallment: "",
     nextservicedate: "",
     natureOfWork: "",
@@ -84,6 +85,7 @@ class EditRecord extends Component {
             custName: this.state.name,
             custPhone: this.state.number,
             product: this.state.product,
+            refrigerant: (this.state.product === 'Air Conditioner' || this.state.product === 'Refrigerator') ? this.state.refrigerant : 'select',
             dateOfInstallment: this.state.dateofinstallment,
             nextServiceDate: this.state.nextservicedate,
             natureOfWork: this.state.natureOfWork,
@@ -115,12 +117,14 @@ class EditRecord extends Component {
       .then((doc) => {
         if (doc.exists) {
           var rec = doc.data();
+          console.log(rec);
           this.setState(
             () => {
               return {
                 name: rec.custName,
                 number: rec.custPhone,
                 product: rec.product,
+                refrigerant: rec.refrigerant !== undefined ? rec.refrigerant: 'select',
                 dateofinstallment: rec.dateOfInstallment,
                 nextservicedate: rec.nextServiceDate,
                 natureOfWork: rec.natureOfWork,
@@ -190,6 +194,26 @@ class EditRecord extends Component {
               <MenuItem value={"Microwave Oven"}>Microwave Oven</MenuItem>
               <MenuItem value={"Others"}>Others</MenuItem>
             </Select>
+            
+            {(this.state.product === 'Air Conditioner' || this.state.product === 'Refrigerator') && (<><p htmlFor="refrigerant">Refrigerant:</p>
+           
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select-1"
+              name="refrigerant"
+              value={this.state.refrigerant}
+              onChange={this.handleInputChange}
+            >
+              <MenuItem value={"select"} disabled>
+                Select a Refrigerant
+              </MenuItem>
+            <MenuItem value={'R22'}>R22</MenuItem>
+            <MenuItem value={'R32'}>R32</MenuItem>
+            <MenuItem value={'R410'}>R410</MenuItem>
+            <MenuItem value={'R134'}>R134</MenuItem>
+            <MenuItem value={'R600'}>R600</MenuItem>
+            <MenuItem value={'R290'}>R290</MenuItem>
+            </Select></>)}
             {/* </FormControl> */}
             <p htmlFor="dateofinstallment">Date:</p>
             <input

@@ -42,6 +42,7 @@ const AddRecord = (props) => {
   const [recommendedBy, setRecommendedBy] = React.useState(null);
   const [recommended, setRecommended] = React.useState('select');
   const [userId, setUserId] = React.useState('');
+  const [refrigerant, setRefrigerant] = React.useState('select');
   useEffect(() => {
     getCurrentUser();
   });
@@ -77,6 +78,9 @@ const AddRecord = (props) => {
       case "product":
         setProduct(e.target.value);
         break;
+        case "refrigerant":
+          setRefrigerant(e.target.value);
+          break;
       case "brandmodel":
         setBrandModel(e.target.value);
         break;
@@ -89,6 +93,7 @@ const AddRecord = (props) => {
       case "recommended":
         setRecommended(e.target.value);
         break;
+      
       default:
         break;
     }
@@ -122,6 +127,7 @@ const AddRecord = (props) => {
             custName: name,
             custPhone: number,
             product: product,
+            refrigerant: refrigerant,
             dateOfInstallment: dateofinstallment,
             nextServiceDate: nextservicedate,
             natureOfWork: natureOfWork,
@@ -196,6 +202,26 @@ const AddRecord = (props) => {
           <MenuItem value={'Others'}>Others</MenuItem>
         </Select>
         </FormControl>
+        <div>
+          <div></div>&nbsp;
+        </div>
+        {(product === 'Air Conditioner' || product === 'Refrigerator') && <FormControl className={selectClasses.formControl}>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select-1"
+          name="refrigerant"
+          value={refrigerant}
+          onChange={handleInputChange}
+        >
+          <MenuItem value={'select'} disabled>Select a Refrigerant</MenuItem>
+          <MenuItem value={'R22'}>R22</MenuItem>
+          <MenuItem value={'R32'}>R32</MenuItem>
+          <MenuItem value={'R410'}>R410</MenuItem>
+          <MenuItem value={'R134'}>R134</MenuItem>
+          <MenuItem value={'R600'}>R600</MenuItem>
+          <MenuItem value={'R290'}>R290</MenuItem>
+        </Select>
+        </FormControl>}
         <div>
           <div></div>&nbsp;
         </div>
