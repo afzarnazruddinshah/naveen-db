@@ -390,7 +390,6 @@ const AddRecord = (props) => {
         </Button>
       </form>
       <div>
-        {" "}
         <div>&nbsp;</div>
       </div>
       <Dialog onClose={handleShareDialogClose} open={isShareDialogOpen}>
