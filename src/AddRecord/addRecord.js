@@ -8,7 +8,7 @@ import "./addrecords.css";
 import Button from "@material-ui/core/Button";
 import HomeIcon from "@material-ui/icons/Home";
 import SaveIcon from "@material-ui/icons/Save";
-import { Sms, WhatsApp} from '@material-ui/icons';
+import { Sms, WhatsApp } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Select from "@material-ui/core/Select";
@@ -394,21 +394,31 @@ const AddRecord = (props) => {
         <div>&nbsp;</div>
       </div>
       <Dialog onClose={handleShareDialogClose} open={isShareDialogOpen}>
-        <DialogTitle className={'share-title'}>Share via</DialogTitle>
+        <DialogTitle className={"share-title"}>Share via</DialogTitle>
         <Grid container>
-          <Grid className={'share-item'} item xs={6} onClick={() => handleShareApp("sms")}>
+          <Grid
+            className={"share-item"}
+            item
+            xs={6}
+            onClick={() => handleShareApp("sms")}
+          >
             <a href={smsURL} rel="noopener noreferrer" target="_blank">
-              <Sms fontSize={'large'} />
+              <Sms fontSize={"large"} />
             </a>
           </Grid>
-          <Grid className={'share-item'} item xs={6} onClick={() => handleShareApp("whatsapp")}>
+          <Grid
+            className={"share-item"}
+            item
+            xs={6}
+            onClick={() => handleShareApp("whatsapp")}
+          >
             <a
               href={whatsAppURL}
               data-action="share/whatsapp/share"
               rel="noopener noreferrer"
               target="_blank"
             >
-              <WhatsApp fontSize={'large'} />
+              <WhatsApp fontSize={"large"} />
             </a>
           </Grid>
         </Grid>
