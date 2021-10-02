@@ -13,6 +13,7 @@ import AssessmentIcon from '@material-ui/icons/Assessment';
 import HomeIcon from '@material-ui/icons/Home';
 //For Excel Generation
 import * as alasql from "alasql";
+import SideNavigationBar from "../SideNavigationBar/SideNavigationBar";
 var XLSX = require("xlsx");
 alasql.setXLSX(XLSX);
 
@@ -255,6 +256,7 @@ const Home = (props) => {
         id="notificationSound"
         src="https://notificationsounds.com/soundfiles/acc3e0404646c57502b480dc052c4fe1/file-sounds-1140-just-saying.mp3"
       />
+      <SideNavigationBar />
     </div>
   );
 };

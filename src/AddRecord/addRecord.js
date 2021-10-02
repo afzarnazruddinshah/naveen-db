@@ -8,12 +8,13 @@ import "./addrecords.css";
 import Button from "@material-ui/core/Button";
 import HomeIcon from "@material-ui/icons/Home";
 import SaveIcon from "@material-ui/icons/Save";
+import { Sms, WhatsApp} from '@material-ui/icons';
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import { Dialog, DialogTitle, Grid } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -36,16 +37,37 @@ const AddRecord = (props) => {
   const [dateofinstallment, setDateOfInstallment] = useState(null);
   const [nextservicedate, setNextServiceDate] = useState(null);
   const [natureOfWork, setNatureOfWork] = useState(null);
-  const [product, setProduct] = React.useState('select');
+  const [product, setProduct] = React.useState("select");
   const [brandModel, setBrandModel] = React.useState(null);
   const [amountReceived, setAmountReceived] = React.useState(null);
   const [recommendedBy, setRecommendedBy] = React.useState(null);
-  const [recommended, setRecommended] = React.useState('select');
-  const [userId, setUserId] = React.useState('');
-  const [refrigerant, setRefrigerant] = React.useState('select');
+  const [recommended, setRecommended] = React.useState("select");
+  const [userId, setUserId] = React.useState("");
+  const [refrigerant, setRefrigerant] = React.useState("select");
+  const [isShareDialogOpen, setIsShareDialogOpen] = React.useState(false);
+  const [whatsAppURL, setWhatsAppURL] = React.useState("");
+  const [smsURL, setSMSURL] = React.useState("");
+  // const handleShareDialogOpen = () => {
+  //   setIsShareDialogOpen(true);
+  // };
+
+  const handleShareDialogClose = () => {
+    setIsShareDialogOpen(false);
+  };
   useEffect(() => {
     getCurrentUser();
   });
+
+  const handleShareApp = (app) => {
+    if (app === "whatsapp") {
+      var url =
+        "https://api.whatsapp.com/send?phone=" +
+        number +
+        "&text=" +
+        encodeURIComponent("This is the message");
+      setIsShareDialogOpen(false);
+    }
+  };
 
   const getCurrentUser = (e) => {
     firebase.auth().onAuthStateChanged((user) => {
@@ -78,9 +100,9 @@ const AddRecord = (props) => {
       case "product":
         setProduct(e.target.value);
         break;
-        case "refrigerant":
-          setRefrigerant(e.target.value);
-          break;
+      case "refrigerant":
+        setRefrigerant(e.target.value);
+        break;
       case "brandmodel":
         setBrandModel(e.target.value);
         break;
@@ -93,7 +115,7 @@ const AddRecord = (props) => {
       case "recommended":
         setRecommended(e.target.value);
         break;
-      
+
       default:
         break;
     }
@@ -132,14 +154,43 @@ const AddRecord = (props) => {
             nextServiceDate: nextservicedate,
             natureOfWork: natureOfWork,
             brandModel: brandModel,
-            amountReceived:amountReceived,
-            recommendedBy:recommendedBy,
-            recommended:recommended,
-            uid: userId
+            amountReceived: amountReceived,
+            recommendedBy: recommendedBy,
+            recommended: recommended,
+            uid: userId,
           })
           .then(() => {
             alert("Record Added Successfully..!");
-            props.history.push("/dashboard");
+            //Open Dialog for Sharing:
+            const message = `
+  Thank you for choosing OnTime Service. Here is your Digital Invoice:
+
+  Customer Name     : ${name}
+  Customer Phone    : ${number}
+  Service for               : ${product}
+  Date of Service       : ${dateofinstallment}
+  Next Service Date  : ${nextservicedate}
+  Nature of Work       : ${natureOfWork}
+  Brand/Model          : ${brandModel}
+  Service Cost           : ₹${amountReceived}
+
+  Regards,
+  OnTime Service,
+  ${
+    userId === "repNQgWi6aPbnhYecJPChsOqiHr1"
+      ? `B. Naveen.
+  Contact: 9677776768`
+      : `B. Praveen.
+  Contact: 9865433411`
+  } 
+  
+            `;
+            setSMSURL(`sms://${number}/?body=${encodeURIComponent(message)}`);
+            setWhatsAppURL(
+              `whatsapp://send?text=${encodeURIComponent(message)}`
+            );
+            setIsShareDialogOpen(true);
+            // props.history.push("/dashboard");
           })
           .catch(function (error) {
             console.error("Error Adding Document: ", error);
@@ -185,43 +236,49 @@ const AddRecord = (props) => {
           <div></div>&nbsp;
         </div>
         <FormControl className={selectClasses.formControl}>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          name="product"
-          value={product}
-          onChange={handleInputChange}
-        >
-          <MenuItem value={'select'} disabled>Select a Product</MenuItem>
-          <MenuItem value={'Air Conditioner'}>Air Conditioner</MenuItem>
-          <MenuItem value={'RO'}>RO</MenuItem>
-          <MenuItem value={'Washing Machine'}>Washing Machine</MenuItem>
-          <MenuItem value={'Refrigerator'}>Refrigerator</MenuItem>
-          <MenuItem value={'TV'}>TV</MenuItem>
-          <MenuItem value={'Microwave Oven'}>Microwave Oven</MenuItem>
-          <MenuItem value={'Others'}>Others</MenuItem>
-        </Select>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            name="product"
+            value={product}
+            onChange={handleInputChange}
+          >
+            <MenuItem value={"select"} disabled>
+              Select a Product
+            </MenuItem>
+            <MenuItem value={"Air Conditioner"}>Air Conditioner</MenuItem>
+            <MenuItem value={"RO"}>RO</MenuItem>
+            <MenuItem value={"Washing Machine"}>Washing Machine</MenuItem>
+            <MenuItem value={"Refrigerator"}>Refrigerator</MenuItem>
+            <MenuItem value={"TV"}>TV</MenuItem>
+            <MenuItem value={"Microwave Oven"}>Microwave Oven</MenuItem>
+            <MenuItem value={"Others"}>Others</MenuItem>
+          </Select>
         </FormControl>
         <div>
           <div></div>&nbsp;
         </div>
-        {(product === 'Air Conditioner' || product === 'Refrigerator') && <FormControl className={selectClasses.formControl}>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select-1"
-          name="refrigerant"
-          value={refrigerant}
-          onChange={handleInputChange}
-        >
-          <MenuItem value={'select'} disabled>Select a Refrigerant</MenuItem>
-          <MenuItem value={'R22'}>R22</MenuItem>
-          <MenuItem value={'R32'}>R32</MenuItem>
-          <MenuItem value={'R410'}>R410</MenuItem>
-          <MenuItem value={'R134'}>R134</MenuItem>
-          <MenuItem value={'R600'}>R600</MenuItem>
-          <MenuItem value={'R290'}>R290</MenuItem>
-        </Select>
-        </FormControl>}
+        {(product === "Air Conditioner" || product === "Refrigerator") && (
+          <FormControl className={selectClasses.formControl}>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select-1"
+              name="refrigerant"
+              value={refrigerant}
+              onChange={handleInputChange}
+            >
+              <MenuItem value={"select"} disabled>
+                Select a Refrigerant
+              </MenuItem>
+              <MenuItem value={"R22"}>R22</MenuItem>
+              <MenuItem value={"R32"}>R32</MenuItem>
+              <MenuItem value={"R410"}>R410</MenuItem>
+              <MenuItem value={"R134"}>R134</MenuItem>
+              <MenuItem value={"R600"}>R600</MenuItem>
+              <MenuItem value={"R290"}>R290</MenuItem>
+            </Select>
+          </FormControl>
+        )}
         <div>
           <div></div>&nbsp;
         </div>
@@ -277,23 +334,25 @@ const AddRecord = (props) => {
           <div></div>&nbsp;
         </div>
         <FormControl className={selectClasses.formControl}>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          name="recommended"
-          value={recommended}
-          onChange={handleInputChange}
-        >
-          <MenuItem value={'select'} disabled>Recommended By</MenuItem>
-          <MenuItem value={'Relatives'}>Relatives</MenuItem>
-          <MenuItem value={'Friends'}>Friends</MenuItem>
-          <MenuItem value={'Dealers'}>Dealers</MenuItem>
-          <MenuItem value={'Neighbours'}>Neighbours</MenuItem>
-          <MenuItem value={'Customers'}>Customers</MenuItem>
-          <MenuItem value={'JustDial'}>JustDial</MenuItem>
-          <MenuItem value={'Google'}>Google</MenuItem>
-          <MenuItem value={'Others'}>Others</MenuItem>
-        </Select>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            name="recommended"
+            value={recommended}
+            onChange={handleInputChange}
+          >
+            <MenuItem value={"select"} disabled>
+              Recommended By
+            </MenuItem>
+            <MenuItem value={"Relatives"}>Relatives</MenuItem>
+            <MenuItem value={"Friends"}>Friends</MenuItem>
+            <MenuItem value={"Dealers"}>Dealers</MenuItem>
+            <MenuItem value={"Neighbours"}>Neighbours</MenuItem>
+            <MenuItem value={"Customers"}>Customers</MenuItem>
+            <MenuItem value={"JustDial"}>JustDial</MenuItem>
+            <MenuItem value={"Google"}>Google</MenuItem>
+            <MenuItem value={"Others"}>Others</MenuItem>
+          </Select>
         </FormControl>
         <div>
           <div></div>&nbsp;
@@ -334,6 +393,26 @@ const AddRecord = (props) => {
         {" "}
         <div>&nbsp;</div>
       </div>
+      <Dialog onClose={handleShareDialogClose} open={isShareDialogOpen}>
+        <DialogTitle className={'share-title'}>Share via</DialogTitle>
+        <Grid container>
+          <Grid className={'share-item'} item xs={6} onClick={() => handleShareApp("sms")}>
+            <a href={smsURL} rel="noopener noreferrer" target="_blank">
+              <Sms fontSize={'large'} />
+            </a>
+          </Grid>
+          <Grid className={'share-item'} item xs={6} onClick={() => handleShareApp("whatsapp")}>
+            <a
+              href={whatsAppURL}
+              data-action="share/whatsapp/share"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <WhatsApp fontSize={'large'} />
+            </a>
+          </Grid>
+        </Grid>
+      </Dialog>
     </div>
   );
 };

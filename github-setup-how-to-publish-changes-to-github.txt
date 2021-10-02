@@ -1,0 +1,8 @@
+1. Make Changes
+2. npm run deploy
+3. git add .
+4. git commit -m "comment here"
+5. git push -u origin master
+
+
+**Before this, make sure you have setup git properly
